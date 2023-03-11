@@ -10,6 +10,11 @@
         "128":"logo.png"
 
     },
-    "permissions":["tabs", "<all_urls>"]
+    "permissions":["tabs", "<all_urls>", "nativeMessaging"],
+    "externally_connectable": {
+        "matches": ["*://colab.research.google.com/*"]
+    }
+    
+    
 
 }
