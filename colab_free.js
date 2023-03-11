@@ -20,6 +20,9 @@ function sendMessage(message) {
 
 
 function check_offline() {
+    if(!document.querySelector("body > div.notebook-vertical.colab-left-pane-open > div.notebook-horizontal > colab-left-pane")){
+        clickFiles()
+    }
     element=document.querySelector("colab-file-view > div.child-files > colab-file-view:nth-child(1) > div.file-title-row > span")
     sendMessage("Kontrol ediliyor")
     if (!element){
