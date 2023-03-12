@@ -21,7 +21,7 @@ function setText(request) {
     }
 }
 
-function sendGetStateRequest() {
+function sendGetStateRequest(tabs) {
     port = chrome.tabs.connect(tabs[0].id,{name: "getState"});
     port.postMessage({url:tabs[0].url});
 }
@@ -45,6 +45,6 @@ window.onload = function () {
             document.getElementById("clickactivity").hidden = true
             return
         }
-        sendGetStateRequest()
+        sendGetStateRequest(tabs)
     });
 }
