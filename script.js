@@ -5,14 +5,13 @@ state_map = {
     "WRONG_WEBSITE": "Colab sitesinde değilsiniz"
 }
 function injectTheScript() {
+    console.log("Colab Free Checker Activated")
     chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-        tab = tabs[0]
         chrome.tabs.executeScript(tabs[0].id, { file: "colab_free.js" });
         document.getElementById('state').innerHTML = "Activated"
-        document.getElementById("clickactivity").hidden = false
+        document.getElementById("clickactivity").disabled = true
     });
 }
-document.getElementById('clickactivity').addEventListener('click', injectTheScript);
 function setText(request) {
     if (request.type ||
         request.type === "FROM_PAGE") {
@@ -21,6 +20,13 @@ function setText(request) {
         document.getElementById("clickactivity").hidden = request.activated
     }
 }
+
+function sendGetStateRequest() {
+    port = chrome.tabs.connect(tabs[0].id,{name: "getState"});
+    port.postMessage({url:tabs[0].url});
+}
+
+document.getElementById('clickactivity').addEventListener('click', injectTheScript);
 chrome.runtime.onMessage.addListener(
     function (request, sender, sendResponse) {
         chrome.tabs.query({ currentWindow: true, active: true }, function (tabs) {
@@ -37,7 +43,8 @@ window.onload = function () {
         if (!tabs[0].url.includes("colab")) {
             document.getElementById('state').innerHTML = state_map["WRONG_WEBSITE"]
             document.getElementById("clickactivity").hidden = true
+            return
         }
-        chrome.tabs.sendMessage(tab.id, {type: "getState"})
+        sendGetStateRequest()
     });
 }

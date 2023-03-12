@@ -5,13 +5,20 @@ const variables_tab_query = "div.left-pane-top > div:nth-child(3) > paper-icon-b
 const files_tab_query = "div.left-pane-top > div:nth-child(4) > paper-icon-button"
 
 
-
-
-
 state = "OFFLINE" // ["OFFLINE", "ONLINE", "LOADING"]
 activated = true
 offline_count = 0
 is_loading = false
+
+function getState(){
+    if (is_loading) {
+        return "LOADING"
+    }
+    if (is_offline()) {
+        return "OFFLINE"
+    }
+    return "ONLINE"
+}
 
 function clickVariables() {
     document.querySelector(variables_tab_query).click()
@@ -32,24 +39,6 @@ function sendMessage(state) {
     chrome.runtime.sendMessage(data);
 }
 
-chrome.runtime.onMessage.addListener(
-    function (request, sender, sendResponse) {
-        console.log(state)
-        if (request.method == "getState") {
-            console.log(state)
-            sendMessage(state)
-        }
-    }
-);
-
-chrome.extension.onRequest.addListener(
-    function (request, sender, sendResponse) {
-        if (request.method == "getState") {
-            data = { type: "FROM_PAGE", state: state, offline_count: offline_count, method: "getState", activated: activated }
-            sendResponse(data);
-        }
-    }
-);
 function is_offline() {
     return !document.querySelector(offline_query)
 }
@@ -86,4 +75,13 @@ function check_offline() {
     doOnline()
 }
 
+chrome.runtime.onConnect.addListener(function (port) {
+    if (port.name == "getState") {
+        port.onMessage.addListener(function (response) {
+            state=getState()
+            console.log(state)
+            sendMessage(state)
+        });
+    }
+});
 setInterval(check_offline, 1000)
