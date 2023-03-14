@@ -2,8 +2,48 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
+  min-height: 200px;
+  min-width: 200px;
   background: linear-gradient(90deg, #e3ffe7 0%, #d9e7ff 100%);
+}
+
+.header_logo {
+  height: 4rem;
+}
+
+footer {
+  /* color: white;
+  background-color: black; */
+  margin-top: 20px;
+  height: 40px;
+  font-size: 13px;
+  align-items: center;
+  text-align: center;
+}
+
+.container {
+  text-align: center;
+}
+
+.main {
+  text-align: center;
+}
+
+#state {
+  font-weight: bold;
+  text-align: center;
+  font-size: 24px;
+}
+
+#offline_count {
+  text-align: center;
+  font-size: 16px;
+}
+
+.current-status {
+  font-size: 14px;
+  text-align: center;
+  max-width: 280px;
 }
 
 .toogle_label {
@@ -65,4 +105,4 @@ body {
   stroke: #52d66b;
   stroke-dasharray: 25;
   stroke-dashoffset: 25;
-}/*# sourceMappingURL=toogle_button.css.map */
+}/*# sourceMappingURL=style.css.map */

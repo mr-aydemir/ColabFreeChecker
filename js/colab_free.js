@@ -6,14 +6,19 @@ const files_tab_query = "div.left-pane-top > div:nth-child(4) > paper-icon-butto
 const file_browser_message_query = "body > div.notebook-vertical.large-notebook.colab-left-pane-open > div.notebook-horizontal > colab-left-pane > colab-resizer > div.resizer-contents > div.left-pane-container > colab-file-browser > div.file-browser-message"
 const reload_files_query = "body > div.notebook-vertical.large-notebook.colab-left-pane-open > div.notebook-horizontal > colab-left-pane > colab-resizer > div.resizer-contents > div.left-pane-container > colab-file-browser > colab-file-tree > div.file-tree-buttons > paper-icon-button:nth-child(2)"
 const hidden_files_toggle = "#hidden-files-toggle"
-const search_query="body > div.notebook-vertical.colab-left-pane-open > div.notebook-horizontal > colab-left-pane > div > div.left-pane-top > div:nth-child(2) > paper-icon-button"
-state = "OFFLINE" // ["OFFLINE", "ONLINE", "LOADING"]
-activated = true
+const search_query = "body > div.notebook-vertical.colab-left-pane-open > div.notebook-horizontal > colab-left-pane > div > div.left-pane-top > div:nth-child(2) > paper-icon-button"
+const connect_button_query="#top-toolbar > colab-connect-button"
+
+state = "OFFLINE" // ["OFFLINE", "ONLINE", "LOADING", "DISABLED"]
+activated = false
 offline_count = 0
 is_loading = false
 is_on_interaction = false
 
 function getState() {
+    if (!activated){
+        return "DISABLED"
+    }
     if (is_loading) {
         return "LOADING"
     }
@@ -46,25 +51,27 @@ function clickSearch() {
 function getRandomInt(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
 }
-is_on_interaction2=false
+is_on_interaction2 = false
 function doInteraction() {
     if (is_on_interaction2 || is_loading) return
     randomTime = getRandomInt(10000, 20000)
-    is_on_interaction2=true
+    is_on_interaction2 = true
     setTimeout(function () {
         is_on_interaction = true
         clickSearch()
         setTimeout(function () {
             clickFiles()
             is_on_interaction = false
-            is_on_interaction2=false
+            is_on_interaction2 = false
         }, 200)
     }, randomTime)
 }
 
 
-function sendMessage(state) {
-    state = state
+function sendMessage(nextstate, same_send=false) {
+    if (state==nextstate && !same_send) return
+    console.log(state)
+    state = nextstate
     data = { type: "FROM_PAGE", state: state, offline_count: offline_count, activated: activated }
     chrome.runtime.sendMessage(data);
 }
@@ -75,8 +82,23 @@ function is_offline() {
 function is_left_pane_closed() {
     return !document.querySelector(left_pane_query)
 }
+function shadowRoot() {
+   return document.querySelector(connect_button_query).shadowRoot
+}
+function connect_button() {
+    return shadowRoot().querySelector("#connect")
+}
+function statistics_is_valid() {
+        return connect_button.querySelector("#connect-button-resource-display")
+}
+function clickConnect() {
+    connect_button().click()
+}
 
 function doOnline() {
+    /* if (!statistics_is_valid()){
+        clickConnect()
+    } */
     if (is_offline()) {
         offline_count++
         sendMessage("OFFLINE")
@@ -89,7 +111,7 @@ function doOnline() {
     else sendMessage("ONLINE")
 }
 function check_offline() {
-    if(is_on_interaction) return
+    if (is_on_interaction) return
     if (is_loading) {
         sendMessage("LOADING")
         clickRamMessageOK()
@@ -105,28 +127,37 @@ function check_offline() {
     }
     doOnline()
 }
-activeInterval=null
+function reset() { // ["OFFLINE", "ONLINE", "LOADING", "DISABLED"]
+    is_loading = false
+    is_on_interaction = false
+}
+activeInterval = null
 chrome.runtime.onConnect.addListener(function (port) {
     if (port.name == "getState") {
         port.onMessage.addListener(function (response) {
-            state = getState()
+            sendMessage(getState(), true)
             console.log(state)
-            sendMessage(state)
         });
     }
-    else if (port.name=="enableIt"){
-        if (!activeInterval) {
-            activeInterval=setInterval(check_offline, 1000)
-            activated = true
-        }
-    }
-    else if (port.name=="disableIt"){
-        if (activeInterval) {
-            clearInterval(activeInterval)
-            activeInterval=null
-            activated = false
-        }
+    else if (port.name == "toogleActivity") {
+        
+        port.onMessage.addListener(function (response) {
+            console.log("toogle");
+            if (response.enable) {
+                activeInterval = setInterval(check_offline, 1000)
+                activated = true
+            }
+            else {
+                clearInterval(activeInterval)
+                activeInterval = null
+                activated = false
+                reset()
+            }
+            
+            sendMessage(getState(), true)
+        });
+
     }
 });
-setInterval(check_offline, 1000)
+/* setInterval(check_offline, 1000) */
 //setInterval(doInteraction, 1000)

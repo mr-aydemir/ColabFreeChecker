@@ -3,11 +3,11 @@
     "version": "0.0.1",
     "manifest_version": 3,
     "action": {
-        "default_popup": "popup.html",
-        "default_icon": "logo.png"
+        "default_popup": "/pages/popup.html",
+        "default_icon": "/assets/images/logo.png"
     },
     "icons": {
-        "128": "logo.png"
+        "128": "/assets/images/logo.png"
     },
     "permissions": [
         "tabs",
@@ -16,5 +16,15 @@
     ],
     "host_permissions": [
         "https://colab.research.google.com/*"
+    ],
+    "content_scripts": [
+        {
+            "matches": [
+                "https://colab.research.google.com/*"
+            ],
+            "js": [
+                "/js/colab_free.js"
+            ]
+        }
     ]
 }
