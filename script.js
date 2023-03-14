@@ -7,7 +7,11 @@ state_map = {
 function injectTheScript() {
     console.log("Colab Free Checker Activated")
     chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-        chrome.tabs.executeScript(tabs[0].id, { file: "colab_free.js" });
+        chrome.scripting.executeScript({
+            target: { tabId: tabs[0].id },
+            files: ["colab_free.js"]
+          });
+        /* chrome.tabs.executeScript(tabs[0].id, { file: "colab_free.js" }); */
         document.getElementById('state').innerHTML = "Activated"
         document.getElementById("clickactivity").disabled = true
     });

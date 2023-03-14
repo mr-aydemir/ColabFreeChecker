@@ -1,0 +1,68 @@
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background: linear-gradient(90deg, #e3ffe7 0%, #d9e7ff 100%);
+}
+
+.toogle_label {
+  position: relative;
+  display: inline-block;
+  width: 5rem;
+  height: 2.5rem;
+  cursor: pointer;
+  transform: translate3d(0, 0, 0);
+  -webkit-tap-highlight-color: transparent;
+}
+.toogle_label:before {
+  position: relative;
+  top: 1px;
+  left: 1px;
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: 2.5rem;
+  box-shadow: -2px -4px 6px 0px rgba(255, 255, 255, 0.6) inset, 2px 4px 6px 0px rgba(136, 165, 191, 0.6) inset;
+  content: "";
+  transition: background 0.3s ease;
+}
+.toogle_label span {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  background: linear-gradient(90deg, #e3ffe7 0%, #d9e7ff 100%);
+  box-shadow: -2px -4px 6px 0px rgba(255, 255, 255, 0.6), 2px 4px 6px 0px rgba(136, 165, 191, 0.6);
+  transition: all 0.3s ease;
+}
+.toogle_label svg {
+  fill: none;
+  transform: scale(2);
+}
+.toogle_label svg path {
+  transition: all 0.3s linear;
+  stroke: #eb2f06;
+  stroke-dasharray: 24;
+  stroke-dashoffset: 0;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 2;
+}
+
+#toggle-input {
+  display: none;
+}
+#toggle-input:checked + label span {
+  transform: translateX(2.5rem);
+}
+#toggle-input:checked + label path {
+  stroke: #52d66b;
+  stroke-dasharray: 25;
+  stroke-dashoffset: 25;
+}/*# sourceMappingURL=toogle_button.css.map */
