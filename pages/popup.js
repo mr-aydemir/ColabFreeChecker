@@ -5,24 +5,12 @@ state_map = {
     "WRONG_WEBSITE": "Colab sitesinde değilsiniz",
     "DISABLED":"Aktif Değil"
 }
-/* function injectTheScript() {
-    console.log("Colab Free Checker Activated")
-    chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-        chrome.scripting.executeScript({
-            target: { tabId: tabs[0].id },
-            files: ["colab_free.js"]
-        });
-        document.getElementById('state').innerHTML = "Activated"
-        document.getElementById('toggle-input').disabled = true
-    });
-} */
+
 function setText(request) {
     if (request.type ||
         request.type === "FROM_PAGE") {
         document.getElementById('state').innerHTML = state_map[request.state]
         document.getElementById('offline_count').innerHTML = "Düzeltme: "+ request.offline_count
-        /* document.getElementById('current-status').innerHTML = request.activated?"Çevrimdışı düzeltme: Aktif":"Çevrimdışı düzeltme: Devredışı" */
-        //document.getElementById("clickactivity").hidden = request.activated
         document.getElementById('toggle-input').checked = request.activated
     }
 }
@@ -39,7 +27,6 @@ function on_toogle_click(cb) {
     });
 }
 
-//document.getElementById('clickactivity').addEventListener('click', injectTheScript);
 document.getElementById('toggle-input').addEventListener('change', on_toogle_click);
 chrome.runtime.onMessage.addListener(
     function (request, sender, sendResponse) {

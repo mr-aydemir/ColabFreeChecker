@@ -33,8 +33,8 @@ function clickVariables() {
 }
 
 function clickRamMessageOK() {
-    if (!document.querySelector("mwc-button")) return
-    document.querySelector("mwc-button").click()
+    if (!document.querySelector(ram_message_ok_button_query)) return
+    document.querySelector(ram_message_ok_button_query).click()
 }
 
 function clickFiles() {
@@ -127,7 +127,7 @@ function check_offline() {
     }
     doOnline()
 }
-function reset() { // ["OFFLINE", "ONLINE", "LOADING", "DISABLED"]
+function reset() {
     is_loading = false
     is_on_interaction = false
 }
@@ -159,5 +159,3 @@ chrome.runtime.onConnect.addListener(function (port) {
 
     }
 });
-/* setInterval(check_offline, 1000) */
-//setInterval(doInteraction, 1000)
