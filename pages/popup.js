@@ -20,6 +20,7 @@ function sendGetStateRequest(tabs) {
     const port = chrome.tabs.connect(tabs[0].id, { name: "getState" });
     port.postMessage({ url: tabs[0].url });
 }
+// checkboxla açıp kapatma
 function on_toogle_click(cb) {
     const enable = this.checked
     chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
@@ -27,10 +28,9 @@ function on_toogle_click(cb) {
         port.postMessage({ enable: enable });
     });
 }
-
-
-
 document.getElementById('toggle-input').addEventListener('change', on_toogle_click);
+
+// Sayfanın gönderdiği durumla arayüz bilgilendirmeleri
 chrome.runtime.onMessage.addListener(
     function (request, sender, sendResponse) {
         chrome.tabs.query({ currentWindow: true, active: true }, function (tabs) {
@@ -43,12 +43,15 @@ chrome.runtime.onMessage.addListener(
 );
 
 window.onload = function () {
+    
     chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+        // colab sitesinde değilse
         if (!tabs[0].url.includes("colab")) {
             document.getElementById('state').innerHTML = state_map["WRONG_WEBSITE"]
             document.getElementById('toggle-input').disabled = true
             return
         }
+        // colabtaysa sayfadan durum ister
         sendGetStateRequest(tabs)
     });
 }

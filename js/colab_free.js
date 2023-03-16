@@ -94,26 +94,23 @@ function drive_folder() {
 var is_on_interaction2 = false
 function doInteraction() {
     if (is_on_interaction2 || is_loading) return
-    const randomTime = getRandomInt(10000, 20000)
+    const randomTime = getRandomInt(5000, 10000)
     is_on_interaction2 = true
+    // 10-20 sn de bir search sekmesine tıklanıp tekrar dosyalara tıklanır.
     setTimeout(function () {
-        is_on_interaction = true
-        clickSearch()
-        setTimeout(function () {
-            clickFiles()
-            is_on_interaction = false
-            is_on_interaction2 = false
-        }, 200)
+        is_on_interaction2 = false
+        //is_on_interaction = true
+        var element = document.querySelector("paper-icon-button[icon='colab:folder-refresh']")
+        if (element) element.click()
     }, randomTime)
 }
 var is_doing_online = false
 function doOnline() {
-    /* if (!statistics_is_valid()){
-        clickConnect()
-    } */
+    // ofline durumu kontrol edilir 
     if (is_offline() && !is_doing_online) {
         offline_count++
         sendMessage("OFFLINE")
+        // değişkenler sekmesine tıklanıp ardından tekrar dosyalara tıklanır, çevrımdışı olayından çıkarmaktadır.
         clickVariables()
         is_doing_online = true
         setTimeout(function () {
@@ -127,22 +124,30 @@ function doOnline() {
     else sendMessage("ONLINE")
 }
 function check_offline() {
+    // Burada mısınız mesajı gelmişse tıklanır
     if (recaptcha()) {
         recaptcha().click()
     }
+    // Gpu kullanım sınırı mesajı geldiyse sonraki taba geçmesi için eklentiye haber verilir.
     if (is_there_gpu_allert_message()) {
         sendMessage("NEXT_TAB")
+        set_enable(false)
         return
     }
-    if (is_on_interaction) return
+    // interactiondaysa 
+    //if (is_on_interaction) return
+    // dosyalar yükleniyorsa
     if (is_loading) {
         sendMessage("LOADING")
         if (!is_there_gpu_allert_message()) {
+            // uyarı onaylanır
             clickRamMessageOK()
         }
+        // loadingten çıkmak
         if (is_offline()) return
         is_loading = false
     }
+    // yan panel kapanmışsa açılır
     if (is_left_pane_closed()) {
         clickFiles()
         if (is_offline()) {
@@ -159,47 +164,59 @@ function reset() {
 
 
 var activeInterval = null
+// durum aktifleştirme pasifleştirme
 function set_enable(value) {
     if (value) {
+        // aktif interval
         activeInterval = setInterval(function () {
+            // offline kontrolcüsü
             check_offline()
+            // 10-20 sn bir etkileşim yapan fonksyon
             doInteraction()
         }, 1000)
         activated = true
     }
     else {
+        // interval imha edilir
         clearInterval(activeInterval)
+        //gerekli temizlemeler yapılır
         activeInterval = null
         activated = false
         reset()
     }
 }
-function connectDrive() {
-    document.querySelector("paper-icon-button.mount-drive-button").click()
-    const element = document.querySelector("body > mwc-dialog > div > div").textContent.includes("Colaboratory")
-    if (!element) {
-        document.querySelector("body > mwc-dialog > mwc-button[dialogaction='ok']").click()
-    }
-    else document.querySelector("body > mwc-dialog > mwc-button[dialogaction='cancel']").click()
-}
 
-var drive_folder_interval=null
+
+var drive_folder_interval = null
 function clear_drive_folder_interval() {
     clearInterval(drive_folder_interval)
 }
 function otomation() {
     var drive_connect_clicked = false
-    var drive_connect_paper_showed=false
-    if (is_left_pane_closed()) {
-        clickFiles()
-    }
+    var drive_connect_paper_showed = false
+    var left_pane_opened = false
     drive_folder_interval = setInterval(() => {
-        if(!drive_connect_paper_showed){
-            var element=document.querySelector("paper-icon-button.mount-drive-button")
+        // GPU kullanım limiti dolmuşsa sonraki taba geçmesi için eklenti bilgilendirilir
+        if (is_there_gpu_allert_message()) {
+            sendMessage("NEXT_TAB")
+            return
+        }
+        // yan panel kapatılmışsa açılır, drive vs dosyaların görüntülenmesi için gereklidir.
+        if (!left_pane_opened) {
+            if (is_left_pane_closed()) {
+                clickFiles()
+                left_pane_opened = true
+                return
+            }
+        }
+        // her ihtimale karşı drive bağlama/kesme tuşuna basılır 
+        else if (!drive_connect_paper_showed) {
+            var element = document.querySelector("paper-icon-button.mount-drive-button")
             if (!element) return
             element.click()
-            drive_connect_paper_showed=true
+            drive_connect_paper_showed = true
         }
+        // Drive bağlantı mesajı gelirse bağlantı kes mesajı değilse(bağlantı yap mesajıdır öyleyse) ok tuşuna basılır.
         else if (!drive_connect_clicked) {
             var element = document.querySelector("body > mwc-dialog > div > div")
             if (!element) return
@@ -209,21 +226,27 @@ function otomation() {
                 console.log("connect ok clicked");
                 drive_connect_clicked = true
             }
+            // bağlantı kes mesajı ise iptale basılır.
             else {
                 document.querySelector("body > mwc-dialog > mwc-button[dialogaction='cancel']").click()
                 drive_connect_clicked = true
             }
         }
         else {
+            // Drive klasörü gözükene kadar klasör refresh butonuna basılır
             if (!drive_folder()) {
-                var element=document.querySelector("paper-icon-button[icon='colab:folder-refresh']")
-                if(element) element.click()
+                var element = document.querySelector("paper-icon-button[icon='colab:folder-refresh']")
+                if (element) element.click()
                 return
             }
-            document.querySelector("colab-run-button").click()
-
+            //drive klasörü gelince eğer işlem çalışan bir işlem değilse çalıştırılır.
+            if (!document.querySelector("colab-run-button")?.shadowRoot?.querySelector("div > div.cell-execution-indicator > iron-icon[icon='colab:stop-circle-filled']")) {
+                document.querySelector("colab-run-button").click()
+            }
+            // Offline durum kontrolü çalıştırılır.
             set_enable(false)
             set_enable(true)
+            // bu interval kendini imha eder.
             clear_drive_folder_interval()
         }
     }, 1000);
@@ -231,19 +254,24 @@ function otomation() {
 
 
 chrome.runtime.onConnect.addListener(function (port) {
+    // Eklenti durum bilgilendirmesi istemişse
     if (port.name == "getState") {
         port.onMessage.addListener(function (response) {
             sendMessage(getState(), true)
             console.log(state)
         });
     }
+    // İşlemlerin aç kapa anahtarı
     else if (port.name == "toogleActivity") {
         port.onMessage.addListener(function (response) {
             console.log("toogle");
+            // otomasyon istenmişse
             if (response.otomation) {
                 otomation()
             } else
+                // Aktifleştirme durumu
                 set_enable(response.enable)
+            // Eklenti bilgilendirilir.
             sendMessage(getState(), true)
         });
 
@@ -251,3 +279,4 @@ chrome.runtime.onConnect.addListener(function (port) {
 });
 //!document.querySelector("#message-area-secondary").ariaHidden && document.querySelector("#message-area-secondary").shadowRoot.textContent.includes("Drive")
 //document.querySelector("#recaptcha-anchor > div.recaptcha-checkbox-border").click()
+sendMessage("LOAD_COMPLETED")
