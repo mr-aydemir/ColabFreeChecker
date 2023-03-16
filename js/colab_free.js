@@ -1,4 +1,4 @@
-const offline_query = "body > div.notebook-vertical.colab-left-pane-open > div.notebook-horizontal > colab-left-pane > colab-resizer > div.resizer-contents > div.left-pane-container > colab-file-browser > colab-file-tree > div.files-root"
+const offline_query = ".file-tree-name[title='sample_data']"
 const left_pane_query = "body > div.notebook-vertical.colab-left-pane-open > div.notebook-horizontal > colab-left-pane"
 const ram_message_ok_button_query = "mwc-button"
 const variables_tab_query = "div.left-pane-top > div:nth-child(3) > paper-icon-button"
@@ -9,11 +9,11 @@ const hidden_files_toggle = "#hidden-files-toggle"
 const search_query = "body > div.notebook-vertical.colab-left-pane-open > div.notebook-horizontal > colab-left-pane > div > div.left-pane-top > div:nth-child(2) > paper-icon-button"
 const connect_button_query = "#top-toolbar > colab-connect-button"
 
-state = "OFFLINE" // ["OFFLINE", "ONLINE", "LOADING", "DISABLED", "NEXT_TAB"]
-activated = false
-offline_count = 0
-is_loading = false
-is_on_interaction = false
+var state = "OFFLINE" // ["OFFLINE", "ONLINE", "LOADING", "DISABLED", "NEXT_TAB"]
+var activated = false
+var offline_count = 0
+var is_loading = false
+var is_on_interaction = false
 
 function getState() {
     if (!activated) {
@@ -58,7 +58,7 @@ function sendMessage(nextstate, same_send = false) {
     if (state == nextstate && !same_send) return
     console.log(state)
     state = nextstate
-    data = { type: "FROM_PAGE", state: state, offline_count: offline_count, activated: activated }
+    const data = { type: "FROM_PAGE", state: state, offline_count: offline_count, activated: activated }
     chrome.runtime.sendMessage(data);
 }
 
@@ -81,7 +81,7 @@ function clickConnect() {
     connect_button().click()
 }
 function is_there_gpu_allert_message() {
-    element = document.querySelector("body > mwc-dialog");
+    const element = document.querySelector("body > mwc-dialog");
     return element && element.shadowRoot.textContent.includes("GPU");
 }
 function recaptcha() {
@@ -91,10 +91,10 @@ function drive_folder() {
     return document.querySelector(".child-files>colab-file-view>.file-title-row>.file-tree-name[title='drive']")
 }
 
-is_on_interaction2 = false
+var is_on_interaction2 = false
 function doInteraction() {
     if (is_on_interaction2 || is_loading) return
-    randomTime = getRandomInt(10000, 20000)
+    const randomTime = getRandomInt(10000, 20000)
     is_on_interaction2 = true
     setTimeout(function () {
         is_on_interaction = true
@@ -106,7 +106,7 @@ function doInteraction() {
         }, 200)
     }, randomTime)
 }
-is_doing_online=false
+var is_doing_online = false
 function doOnline() {
     /* if (!statistics_is_valid()){
         clickConnect()
@@ -115,10 +115,10 @@ function doOnline() {
         offline_count++
         sendMessage("OFFLINE")
         clickVariables()
-        is_doing_online=true
+        is_doing_online = true
         setTimeout(function () {
             clickFiles()
-            is_doing_online=false
+            is_doing_online = false
         }, 200)
         if (is_offline()) {
             is_loading = true
@@ -156,6 +156,9 @@ function reset() {
     is_loading = false
     is_on_interaction = false
 }
+
+
+var activeInterval = null
 function set_enable(value) {
     if (value) {
         activeInterval = setInterval(function () {
@@ -171,20 +174,62 @@ function set_enable(value) {
         reset()
     }
 }
+function connectDrive() {
+    document.querySelector("paper-icon-button.mount-drive-button").click()
+    const element = document.querySelector("body > mwc-dialog > div > div").textContent.includes("Colaboratory")
+    if (!element) {
+        document.querySelector("body > mwc-dialog > mwc-button[dialogaction='ok']").click()
+    }
+    else document.querySelector("body > mwc-dialog > mwc-button[dialogaction='cancel']").click()
+}
+
+var drive_folder_interval=null
+function clear_drive_folder_interval() {
+    clearInterval(drive_folder_interval)
+}
 function otomation() {
-    set_enable(true)
+    var drive_connect_clicked = false
+    var drive_connect_paper_showed=false
+    if (is_left_pane_closed()) {
+        clickFiles()
+    }
     drive_folder_interval = setInterval(() => {
-        if (!drive_folder()) {
-            return
+        if(!drive_connect_paper_showed){
+            var element=document.querySelector("paper-icon-button.mount-drive-button")
+            if (!element) return
+            element.click()
+            drive_connect_paper_showed=true
         }
-        document.querySelector("colab-run-button").click()
-        clearInterval(drive_folder_interval)
+        else if (!drive_connect_clicked) {
+            var element = document.querySelector("body > mwc-dialog > div > div")
+            if (!element) return
+            var disconnect_label = element.textContent.includes("Colaboratory")
+            if (!disconnect_label) {
+                document.querySelector("body > mwc-dialog > mwc-button[dialogaction='ok']").click()
+                console.log("connect ok clicked");
+                drive_connect_clicked = true
+            }
+            else {
+                document.querySelector("body > mwc-dialog > mwc-button[dialogaction='cancel']").click()
+                drive_connect_clicked = true
+            }
+        }
+        else {
+            if (!drive_folder()) {
+                var element=document.querySelector("paper-icon-button[icon='colab:folder-refresh']")
+                if(element) element.click()
+                return
+            }
+            document.querySelector("colab-run-button").click()
+
+            set_enable(false)
+            set_enable(true)
+            clear_drive_folder_interval()
+        }
     }, 1000);
 }
 
 
-
-activeInterval = null
 chrome.runtime.onConnect.addListener(function (port) {
     if (port.name == "getState") {
         port.onMessage.addListener(function (response) {
