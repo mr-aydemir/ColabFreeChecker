@@ -85,6 +85,7 @@ function is_there_gpu_allert_message() {
     return element && element.shadowRoot.textContent.includes("GPU");
 }
 function recaptcha() {
+    // document.querySelector("#recaptcha-anchor > div.recaptcha-checkbox-border").click()
     return document.querySelector("#recaptcha-anchor > div.recaptcha-checkbox-border")
 }
 function drive_folder() {
@@ -94,14 +95,22 @@ function drive_folder() {
 var is_on_interaction2 = false
 function doInteraction() {
     if (is_on_interaction2 || is_loading) return
-    const randomTime = getRandomInt(5000, 10000)
+    const randomTime = getRandomInt(10000, 20000)
     is_on_interaction2 = true
     // 10-20 sn de bir search sekmesine tıklanıp tekrar dosyalara tıklanır.
-    setTimeout(function () {
-        is_on_interaction2 = false
-        //is_on_interaction = true
-        var element = document.querySelector("paper-icon-button[icon='colab:folder-refresh']")
-        if (element) element.click()
+    setTimeout(function () { 
+        is_on_interaction = true
+        clickSearch()
+        setTimeout(function () {
+            clickFiles()
+            var element = document.querySelector("paper-icon-button[icon='colab:folder-refresh']")
+            if (element) {
+                element.click()
+                console.log("refresh clicked");
+            }
+            is_on_interaction = false
+            is_on_interaction2 = false
+        }, 200)
     }, randomTime)
 }
 var is_doing_online = false
@@ -124,10 +133,6 @@ function doOnline() {
     else sendMessage("ONLINE")
 }
 function check_offline() {
-    // Burada mısınız mesajı gelmişse tıklanır
-    if (recaptcha()) {
-        recaptcha().click()
-    }
     // Gpu kullanım sınırı mesajı geldiyse sonraki taba geçmesi için eklentiye haber verilir.
     if (is_there_gpu_allert_message()) {
         sendMessage("NEXT_TAB")
@@ -135,7 +140,7 @@ function check_offline() {
         return
     }
     // interactiondaysa 
-    //if (is_on_interaction) return
+    if (is_on_interaction) return
     // dosyalar yükleniyorsa
     if (is_loading) {
         sendMessage("LOADING")
@@ -169,6 +174,12 @@ function set_enable(value) {
     if (value) {
         // aktif interval
         activeInterval = setInterval(function () {
+            // Burada mısınız mesajı gelmişse tıklanır        
+            if (recaptcha() != null) {
+                console.log("Burada mısınız mesajı gelmişse tıklanır");
+                recaptcha().click()
+            }
+            recaptcha()?.click()
             // offline kontrolcüsü
             check_offline()
             // 10-20 sn bir etkileşim yapan fonksyon
