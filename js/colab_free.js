@@ -92,7 +92,7 @@ function drive_folder() {
     return document.querySelector(".child-files>colab-file-view>.file-title-row>.file-tree-name[title='drive']")
 }
 
-var is_on_interaction2 = false
+/* var is_on_interaction2 = false
 function doInteraction() {
     if (is_on_interaction2 || is_loading) return
     const randomTime = getRandomInt(10000, 20000)
@@ -112,7 +112,7 @@ function doInteraction() {
             is_on_interaction2 = false
         }, 200)
     }, randomTime)
-}
+} */
 var is_doing_online = false
 function doOnline() {
     // ofline durumu kontrol edilir 
@@ -183,8 +183,15 @@ function set_enable(value) {
             // offline kontrolcüsü
             check_offline()
             // 10-20 sn bir etkileşim yapan fonksyon
-            doInteraction()
         }, 1000)
+        interval = setInterval(function() { 
+            console.log("working")
+            var selector = "#top-toolbar > colab-connect-button"
+            document.querySelector(selector).shadowRoot.querySelector("#connect").click()
+            setTimeout(function() {
+                    document.querySelector(selector).shadowRoot.querySelector("#connect").click()
+            }, 1000)
+        }, 60*1000)
         activated = true
     }
     else {
