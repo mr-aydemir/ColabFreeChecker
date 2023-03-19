@@ -50,7 +50,7 @@ function appendToList(url) {
   var current_tasks = document.querySelectorAll("#taskname");
   for (var i = 0; i < current_tasks.length; i++) {
     current_tasks[i].onclick = function () {
-      chrome.tabs.create({"url": this.textContent});
+      chrome.tabs.create({ "url": this.textContent });
     }
   }
 }
@@ -68,7 +68,7 @@ function createListWidget(urls) {
 function addurl(url) {
   chrome.storage.local.get("otomation_urls", function (data) {
     var urls = []
-    if (data && data.otomation_urls.length > 0)
+    if (data && data.otomation_urls && data.otomation_urls.length > 0)
       urls = data.otomation_urls
     if (urls.includes(url)) return
 
@@ -82,7 +82,7 @@ function addurl(url) {
 }
 function removeUrl(url) {
   chrome.storage.local.get("otomation_urls", function (data) {
-    if (!data || data.otomation_urls.length == 0) return
+    if (!data || !data.otomation_urls || data.otomation_urls.length == 0) return
     var urls = data.otomation_urls
     if (!urls.includes(url)) return
     urls = urls.filter(function (item) {

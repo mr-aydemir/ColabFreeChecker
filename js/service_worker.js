@@ -48,7 +48,7 @@ function goNext(tab) {
     chrome.storage.local.get("otomation_urls", function (data) {
         var urls = []
         console.log(url)
-        if (data && data.otomation_urls.length > 0)
+        if (data && data.otomation_urls&&data.otomation_urls.length > 0)
             urls = data.otomation_urls
         
         console.log(urls)
