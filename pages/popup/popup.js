@@ -34,7 +34,7 @@ function addUrl_to_otomasyon() {
         var url = tabs[0].url.split("#")[0]
         chrome.storage.local.get("otomation_urls", function (data) {
             var urls = []
-            if (data && data.otomation_urls.length > 0)
+            if (data && data.otomation_urls && data.otomation_urls.length > 0)
                 urls = data.otomation_urls
             if (urls.includes(url)) return
 
@@ -54,7 +54,7 @@ function removeUrl_from_otomasyon() {
     chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
         var url = tabs[0].url.split("#")[0]
         chrome.storage.local.get("otomation_urls", function (data) {
-            if (!data || data.otomation_urls.length == 0) return
+            if (!data || !data.otomation_urls || data.otomation_urls.length == 0) return
             var urls = data.otomation_urls
             if (!urls.includes(url)) return
             urls = urls.filter(function (item) {
@@ -100,7 +100,7 @@ window.onload = function () {
 
     chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
         // colab sitesinde değilse
-        var url=tabs[0].url.split("#")[0]
+        var url = tabs[0].url.split("#")[0]
         if (!tabs[0].url.includes("colab")) {
             document.getElementById('state').innerHTML = state_map["WRONG_WEBSITE"]
             document.getElementById('toggle-input').disabled = true
@@ -108,10 +108,10 @@ window.onload = function () {
             return
         }
         chrome.storage.local.get("otomation_urls", function (data) {
-            if (data && data.otomation_urls&&data.otomation_urls.length > 0) return
+            if (data && data.otomation_urls && data.otomation_urls.length > 0) return
             var urls = data.otomation_urls
             console.log(urls)
-            if (urls.includes(url)) {
+            if (url && urls.includes(url)) {
                 document.getElementById('add_url').hidden = true
                 document.getElementById('remove_url').hidden = false
             }
