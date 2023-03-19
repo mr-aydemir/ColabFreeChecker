@@ -5,15 +5,17 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../assets/styles/style.css">
+    <link rel="stylesheet" href="../../assets/styles/style.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.0/font/bootstrap-icons.css">
     <title>Colab Free Checker</title>
 </head>
 
 <body>
     <div class="main">
         <header>
+            <button class="btn top_right" id="go-to-options"><i class="bi bi-gear-fill"></i></button>
             <a href="" target="_blank" rel="noopener noreferrer"><img class="header_logo"
-                    src="../assets/images/colab_logo2.svg"></a>
+                    src="../../assets/images/colab_logo2.svg"></a>
         </header>
         <div class="container">
             <div id="state">Aktif Değil</div>
@@ -29,11 +31,13 @@
                 </span>
             </label>
             <!-- <div class="current-status" id="current-status"></div> -->
-            <script src="popup.js"></script>
         </div>
         <footer>
             <div class="container">© 2022-2023 Mr-Aydemir</div>
+            <button id="add_url" class="footer_button" >Otomasyon'a Ekle</button>
+            <button id="remove_url" class="footer_button"  hidden>Otomasyon'dan Çıkar</button>
         </footer>
+        <script src="popup.js"></script>
     </div>
 </body>
 

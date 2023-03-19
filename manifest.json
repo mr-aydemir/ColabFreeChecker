@@ -3,8 +3,12 @@
     "version": "0.0.1",
     "manifest_version": 3,
     "action": {
-        "default_popup": "/pages/popup.html",
+        "default_popup": "/pages/popup/popup.html",
         "default_icon": "/assets/images/logo.png"
+    },
+    "options_ui": {
+        "page": "/pages/options/options.html",
+        "open_in_tab": true
     },
     "icons": {
         "128": "/assets/images/logo.png"
@@ -13,7 +17,8 @@
         "tabs",
         "nativeMessaging",
         "scripting",
-        "webNavigation"
+        "webNavigation",
+        "storage"
     ],
     "host_permissions": [
         "https://colab.research.google.com/*"

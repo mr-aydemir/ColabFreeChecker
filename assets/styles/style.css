@@ -7,7 +7,52 @@ body {
   background: linear-gradient(90deg, #e3ffe7 0%, #d9e7ff 100%);
 }
 
+.footer_button {
+  width: 100%;
+  padding: 10px;
+  margin-top: 10px;
+  background: rgba(255, 255, 255, 0.633);
+  border: none;
+}
+
+.footer_button:hover {
+  background-color: white;
+}
+
+.btn {
+  background-color: transparent;
+  /* Blue background */
+  border: none;
+  /* Remove borders */
+  color: black;
+  /* White text */
+  padding: 12px 16px;
+  /* Some padding */
+  font-size: 16px;
+  /* Set a font size */
+  cursor: pointer;
+  /* Mouse pointer on hover */
+}
+
+/* Darker background on mouse-over */
+.btn:hover {
+  background-color: gray;
+}
+
+.top_right {
+  z-index: 100;
+  position: fixed;
+  right: 0;
+}
+
+.top_left {
+  z-index: 100;
+  position: fixed;
+  left: 0;
+}
+
 .header_logo {
+  z-index: 1;
   height: 4rem;
 }
 
