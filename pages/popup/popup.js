@@ -108,7 +108,9 @@ window.onload = function () {
             return
         }
         chrome.storage.local.get("otomation_urls", function (data) {
-            if (data && data.otomation_urls && data.otomation_urls.length > 0) return
+            
+            console.log(data)
+            if (!data || !data.otomation_urls || data.otomation_urls.length == 0) return
             var urls = data.otomation_urls
             console.log(urls)
             if (url && urls.includes(url)) {
