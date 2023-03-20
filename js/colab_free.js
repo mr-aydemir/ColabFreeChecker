@@ -86,7 +86,7 @@ function is_there_gpu_allert_message() {
 }
 function recaptcha() {
     // document.querySelector("#recaptcha-anchor > div.recaptcha-checkbox-border").click()
-    return document.querySelector("#recaptcha-anchor > div.recaptcha-checkbox-border")
+    return document.querySelector("#recaptcha-anchor")
 }
 function drive_folder() {
     return document.querySelector(".child-files>colab-file-view>.file-title-row>.file-tree-name[title='drive']")
