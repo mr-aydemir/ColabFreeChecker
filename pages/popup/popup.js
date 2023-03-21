@@ -112,6 +112,7 @@ window.onload = function () {
             document.getElementById('state').innerHTML = state_map["WRONG_WEBSITE"]
             document.getElementById('toggle-input').disabled = true
             document.getElementById('add_url').hidden = true
+            document.getElementById('start').hidden = true
             return
         }
         chrome.storage.local.get("otomation_urls", function (data) {
