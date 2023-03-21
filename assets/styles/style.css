@@ -19,8 +19,10 @@ body {
   color: white;
 }
 
+
 .footer_button:hover {
   background-color: white;
+  color: black;
 }
 
 .btn {
