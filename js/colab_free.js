@@ -174,11 +174,7 @@ function set_enable(value) {
     if (value) {
         // aktif interval
         activeInterval = setInterval(function () {
-            // Burada mısınız mesajı gelmişse tıklanır        
-            if (recaptcha() != null) {
-                console.log("Burada mısınız mesajı gelmişse tıklanır");
-                recaptcha().click()
-            }
+            // Burada mısınız mesajı gelmişse tıklanır
             recaptcha()?.click()
             // offline kontrolcüsü
             check_offline()
