@@ -6,6 +6,7 @@
         "default_popup": "/pages/popup/popup.html",
         "default_icon": "/assets/images/logo.png"
     },
+    
     "options_ui": {
         "page": "/pages/options/options.html",
         "open_in_tab": true

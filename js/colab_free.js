@@ -187,7 +187,7 @@ function set_enable(value) {
             setTimeout(function() {
                     document.querySelector(selector).shadowRoot.querySelector("#connect").click()
             }, 1000)
-        }, 60*1000)
+        }, 30*1000)
         activated = true
     }
     else {
