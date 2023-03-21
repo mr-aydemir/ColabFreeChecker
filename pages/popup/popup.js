@@ -69,10 +69,17 @@ function removeUrl_from_otomasyon() {
     });
 
 }
+function start() {
+    chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+        setText( {type:"FROM_PAGE", state: "LOADING", offline_count: 0, activated: true })
+        port = chrome.tabs.connect(tabs[0].id, { name: "toogleActivity" });
+        port.postMessage({ enable: true, otomation: true });
+    });
+}
 
 
 
-
+document.getElementById('start').addEventListener('click', start);
 document.getElementById('add_url').addEventListener('click', addUrl_to_otomasyon);
 document.getElementById('remove_url').addEventListener('click', removeUrl_from_otomasyon);
 
@@ -108,7 +115,7 @@ window.onload = function () {
             return
         }
         chrome.storage.local.get("otomation_urls", function (data) {
-            
+
             console.log(data)
             if (!data || !data.otomation_urls || data.otomation_urls.length == 0) return
             var urls = data.otomation_urls

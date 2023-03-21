@@ -14,6 +14,9 @@ body {
   background: rgba(255, 255, 255, 0.633);
   border: none;
 }
+.footer_button.blue{
+  background: rgba(43, 112, 231, 0.633);
+}
 
 .footer_button:hover {
   background-color: white;

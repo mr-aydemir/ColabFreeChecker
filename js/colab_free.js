@@ -180,14 +180,14 @@ function set_enable(value) {
             check_offline()
             // 10-20 sn bir etkileşim yapan fonksyon
         }, 1000)
-        interval = setInterval(function() { 
+        interval = setInterval(function () {
             console.log("working")
             var selector = "#top-toolbar > colab-connect-button"
             document.querySelector(selector).shadowRoot.querySelector("#connect").click()
-            setTimeout(function() {
-                    document.querySelector(selector).shadowRoot.querySelector("#connect").click()
+            setTimeout(function () {
+                document.querySelector(selector).shadowRoot.querySelector("#connect").click()
             }, 1000)
-        }, 30*1000)
+        }, 30 * 1000)
         activated = true
     }
     else {
@@ -204,8 +204,11 @@ function set_enable(value) {
 var drive_folder_interval = null
 function clear_drive_folder_interval() {
     clearInterval(drive_folder_interval)
+    drive_folder_interval = null
+
 }
 function otomation() {
+    if (drive_folder_interval) return
     var drive_connect_clicked = false
     var drive_connect_paper_showed = false
     var left_pane_opened = false
@@ -222,29 +225,30 @@ function otomation() {
                 left_pane_opened = true
                 return
             }
+            left_pane_opened = true
         }
         // her ihtimale karşı drive bağlama/kesme tuşuna basılır 
-        else if (!drive_connect_paper_showed) {
+        else if (!drive_connect_paper_showed && !drive_folder()) {
             var element = document.querySelector("paper-icon-button.mount-drive-button")
             if (!element) return
             element.click()
             drive_connect_paper_showed = true
         }
         // Drive bağlantı mesajı gelirse bağlantı kes mesajı değilse(bağlantı yap mesajıdır öyleyse) ok tuşuna basılır.
-        else if (!drive_connect_clicked) {
+        else if (!drive_connect_clicked && !drive_folder()) {
             var element = document.querySelector("body > mwc-dialog > div > div")
             if (!element) return
             var disconnect_label = element.textContent.includes("Colaboratory")
             if (!disconnect_label) {
-                document.querySelector("body > mwc-dialog > mwc-button[dialogaction='ok']").click()
+                document.querySelector("body > mwc-dialog > mwc-button[dialogaction='ok']")?.click()
                 console.log("connect ok clicked");
-                drive_connect_clicked = true
+
             }
             // bağlantı kes mesajı ise iptale basılır.
             else {
-                document.querySelector("body > mwc-dialog > mwc-button[dialogaction='cancel']").click()
-                drive_connect_clicked = true
+                document.querySelector("body > mwc-dialog > mwc-button[dialogaction='cancel']")?.click()
             }
+            drive_connect_clicked = true
         }
         else {
             // Drive klasörü gözükene kadar klasör refresh butonuna basılır
@@ -255,7 +259,7 @@ function otomation() {
             }
             //drive klasörü gelince eğer işlem çalışan bir işlem değilse çalıştırılır.
             if (!document.querySelector("colab-run-button")?.shadowRoot?.querySelector("div > div.cell-execution-indicator > iron-icon[icon='colab:stop-circle-filled']")) {
-                document.querySelector("colab-run-button").click()
+                document.querySelector("colab-run-button")?.click()
             }
             // Offline durum kontrolü çalıştırılır.
             set_enable(false)
