@@ -43,21 +43,23 @@ function get_next_url(urls, url) {
     return next_tab
 }
 function goNext(tab) {
-    const url = tab.url.split("#")[0]
-    
+    var url = tab.url
+    if (tab.url.includes("#"))
+        url = url.split("#")[0]
+
     chrome.storage.local.get("otomation_urls", function (data) {
         var urls = []
         console.log(url)
-        if (data && data.otomation_urls&&data.otomation_urls.length > 0)
+        if (data && data.otomation_urls && data.otomation_urls.length > 0)
             urls = data.otomation_urls
-        
+
         console.log(urls)
         if (!urls.includes(url) || urls.length < 2) return
         const next = get_next_url(urls, url)
-        
+
         console.log(next)
         if (!next) return
-        chrome.tabs.update(tab.id,{ url: next });
+        chrome.tabs.update(tab.id, { url: next });
         console.log(next)
         var enabled = true
         chrome.tabs.onUpdated.addListener(function doOto(tabId, info) {
