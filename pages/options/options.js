@@ -68,13 +68,14 @@ function changeAllUrls(urls) {
   chrome.storage.sync.set({
     "otomation_urls": urls
   });
-  document.querySelector('#tasks').innerHTML=""
+  document.querySelector('#tasks').innerHTML = ""
   for (const url of urls) {
     appendToList(url)
   }
-  
+
 }
 function addurl(url) {
+  url = url.split("#")[0] ?? url
   chrome.storage.sync.get("otomation_urls", function (data) {
     var urls = []
     if (data && data.otomation_urls && data.otomation_urls.length > 0)

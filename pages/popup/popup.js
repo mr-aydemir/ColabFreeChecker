@@ -31,7 +31,7 @@ function on_toogle_click(cb) {
 function addUrl_to_otomasyon() {
 
     chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-        var url = tabs[0].url.split("#")[0]
+        var url = tabs[0].url.split("#")[0]??tabs[0].url
         chrome.storage.sync.get("otomation_urls", function (data) {
             var urls = []
             if (data && data.otomation_urls && data.otomation_urls.length > 0)
@@ -52,7 +52,7 @@ function addUrl_to_otomasyon() {
 
 function removeUrl_from_otomasyon() {
     chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-        var url = tabs[0].url.split("#")[0]
+        var url = tabs[0].url.split("#")[0]??tabs[0].url
         chrome.storage.sync.get("otomation_urls", function (data) {
             if (!data || !data.otomation_urls || data.otomation_urls.length == 0) return
             var urls = data.otomation_urls
@@ -112,7 +112,7 @@ window.onload = function () {
 
     chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
         // colab sitesinde değilse
-        var url = tabs[0].url.split("#")[0]
+        var url = tabs[0].url.split("#")[0]??tabs[0].url
         if (!tabs[0].url.includes("colab")) {
             document.getElementById('state').innerHTML = state_map["WRONG_WEBSITE"]
             document.getElementById('toggle-input').disabled = true
