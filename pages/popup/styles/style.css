@@ -7,6 +7,10 @@ body {
   background: linear-gradient(90deg, #e3ffe7 0%, #d9e7ff 100%);
 }
 
+.imza {
+  padding: 5px 0px 5px 0px;
+}
+
 .footer_button {
   width: 100%;
   padding: 10px;

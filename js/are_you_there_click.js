@@ -6,6 +6,11 @@ setInterval(function () {
         console.log("are_you_there_click running...")
     }
     document.querySelector("#rc-anchor-container")?.click()
+    dialogs = document.getElementsByTagName("colab-recaptcha-dialog")
+    if (dialog) {
+        dialogs[0]?.close()
+    }
+    document.getElementsByClassName("recaptcha-checkbox goog-inline-block recaptcha-checkbox-unchecked rc-anchor-checkbox")?.item("recaptcha-anchor")?.click()
 }, 5000)
 
 // Kaydedilmeyenler var uyarısını engeller

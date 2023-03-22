@@ -11,7 +11,7 @@ function setText(request) {
     if (request.type ||
         request.type === "FROM_PAGE") {
         document.getElementById('state').innerHTML = state_map[request.state]
-        document.getElementById('offline_count').innerHTML = "Düzeltme: " + request.offline_count
+        /* document.getElementById('offline_count').innerHTML = "Düzeltme: " + request.offline_count */
         document.getElementById('toggle-input').checked = request.activated
     }
 }
