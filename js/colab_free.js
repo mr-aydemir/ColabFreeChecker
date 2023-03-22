@@ -311,6 +311,10 @@ are_you_there_click_loaded = false
 if (!are_you_there_click_loaded) {
     var s = document.createElement('are_you_there_click');
     s.src = chrome.runtime.getURL('are_you_there_click.js');
+    s.onload = function() {
+        this.remove();
+    };
     (document.head || document.documentElement).appendChild(s);
     console.log("Script loading...");
+
 } 
