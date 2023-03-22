@@ -71,14 +71,33 @@ function removeUrl_from_otomasyon() {
 }
 function start() {
     chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-        setText( {type:"FROM_PAGE", state: "LOADING", offline_count: 0, activated: true })
+        setText({ type: "FROM_PAGE", state: "LOADING", offline_count: 0, activated: true })
         port = chrome.tabs.connect(tabs[0].id, { name: "toogleActivity" });
         port.postMessage({ enable: true, otomation: true });
+    });
+}
+function continue_from_last() {
+    chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+        chrome.storage.local.get("last_otomation_url", function (last_otomation_url) {
+            chrome.tabs.update(tabs[0].id, { url: last_otomation_url });
+            var enabled = true
+            chrome.tabs.onUpdated.addListener(function doOto(tabId, info) {
+                if (info.status === 'complete' && tabId == tabs[0].id && enabled) {
+                    setText({ type: "FROM_PAGE", state: "LOADING", offline_count: 0, activated: true })
+                    const port = chrome.tabs.connect(tabs[0].id, { name: "toogleActivity" });
+                    port.postMessage({ enable: true, otomation: true });
+                    chrome.tabs.onUpdated.removeListener(doOto);
+                    enabled = false
+                }
+            });
+        });
+
     });
 }
 
 
 
+document.getElementById('continue').addEventListener('click', continue_from_last);
 document.getElementById('start').addEventListener('click', start);
 document.getElementById('add_url').addEventListener('click', addUrl_to_otomasyon);
 document.getElementById('remove_url').addEventListener('click', removeUrl_from_otomasyon);
@@ -121,6 +140,11 @@ window.onload = function () {
             if (!data || !data.otomation_urls || data.otomation_urls.length == 0) return
             var urls = data.otomation_urls
             console.log(urls)
+            chrome.storage.local.get("last_otomation_url", function (last_otomation_url) {
+                if (!last_otomation_url) return
+                if (url && urls.includes(last_otomation_url))
+                    document.getElementById('continue').hidden = false
+            });
             if (url && urls.includes(url)) {
                 document.getElementById('add_url').hidden = true
                 document.getElementById('remove_url').hidden = false

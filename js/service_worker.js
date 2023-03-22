@@ -44,7 +44,7 @@ function get_next_url(urls, url) {
 }
 function goNext(tab) {
     var url = tab.url
-    if (tab.url.includes("#"))
+    if (url.includes("#"))
         url = url.split("#")[0]
 
     chrome.storage.local.get("otomation_urls", function (data) {

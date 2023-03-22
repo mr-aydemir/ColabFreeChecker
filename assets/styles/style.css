@@ -19,6 +19,11 @@ body {
   color: white;
 }
 
+.footer_button.green{
+  background: rgba(43, 231, 178, 0.633);
+  color: white;
+}
+
 
 .footer_button:hover {
   background-color: white;

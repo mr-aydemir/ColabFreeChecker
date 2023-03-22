@@ -212,6 +212,14 @@ function otomation() {
     var drive_connect_clicked = false
     var drive_connect_paper_showed = false
     var left_pane_opened = false
+
+    var url=document.URL
+    if (url.includes("#"))
+        url = url.split("#")[0]
+    chrome.storage.local.set({
+        "last_otomation_url": url
+    });
+    
     drive_folder_interval = setInterval(() => {
         // GPU kullanım limiti dolmuşsa sonraki taba geçmesi için eklenti bilgilendirilir
         if (is_there_gpu_allert_message()) {
