@@ -31,7 +31,7 @@ function on_toogle_click(cb) {
 function addUrl_to_otomasyon() {
 
     chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-        var url = tabs[0].url.split("#")[0]??tabs[0].url
+        var url = tabs[0].url.split("#")[0] ?? tabs[0].url
         chrome.storage.sync.get("otomation_urls", function (data) {
             var urls = []
             if (data && data.otomation_urls && data.otomation_urls.length > 0)
@@ -52,7 +52,7 @@ function addUrl_to_otomasyon() {
 
 function removeUrl_from_otomasyon() {
     chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-        var url = tabs[0].url.split("#")[0]??tabs[0].url
+        var url = tabs[0].url.split("#")[0] ?? tabs[0].url
         chrome.storage.sync.get("otomation_urls", function (data) {
             if (!data || !data.otomation_urls || data.otomation_urls.length == 0) return
             var urls = data.otomation_urls
@@ -69,15 +69,25 @@ function removeUrl_from_otomasyon() {
     });
 
 }
+
 function start() {
     chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
         chrome.storage.sync.get("last_otomation_url", function (last_otomation_url) {
-            chrome.storage.sync.get("otomation_urls", function (automation_urls) {
-                url=last_otomation_url.last_otomation_url
-                if(!url) url=automation_urls.automation_urls[0]
-                setText({ type: "FROM_PAGE", state: "LOADING", offline_count: 0, activated: true })
-                port = chrome.tabs.connect(tabs[0].id, { name: "toogleActivity" });
-                port.postMessage({ enable: true, otomation: true });
+            chrome.storage.sync.get("otomation_urls", function (data) {
+                url = last_otomation_url.last_otomation_url
+                if (!url) url = data.otomation_urls[0]
+                chrome.tabs.update(tabs[0].id, { url: url });
+                var enabled = true
+                chrome.tabs.onUpdated.addListener(function doOto(tabId, info) {
+                    if (info.status === 'complete' && tabId == tabs[0].id && enabled) {
+                        console.log("otomasyon başladı");
+                        setText({ type: "FROM_PAGE", state: "LOADING", offline_count: 0, activated: true })
+                        port = chrome.tabs.connect(tabs[0].id, { name: "toogleActivity" });
+                        port.postMessage({ enable: true, otomation: true });
+                        chrome.tabs.onUpdated.removeListener(doOto);
+                        enabled = false
+                    }
+                });
             });
         });
     });
@@ -113,7 +123,7 @@ window.onload = function () {
 
     chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
         // colab sitesinde değilse
-        var url = tabs[0].url.split("#")[0]??tabs[0].url
+        var url = tabs[0].url.split("#")[0] ?? tabs[0].url
         if (!tabs[0].url.includes("colab")) {
             document.getElementById('state').innerHTML = state_map["WRONG_WEBSITE"]
             document.getElementById('toggle-input').disabled = true
