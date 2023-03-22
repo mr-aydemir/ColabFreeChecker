@@ -2,7 +2,7 @@
 function save_options() {
     var color = document.getElementById('color').value;
     var likesColor = document.getElementById('like').checked;
-    chrome.storage.local.set({
+    chrome.storage.sync.set({
       favoriteColor: color,
       likesColor: likesColor
     }, function() {
@@ -19,7 +19,7 @@ function save_options() {
   // stored in chrome.storage.
   function restore_options() {
     // Use default value color = 'red' and likesColor = true.
-    chrome.storage.local.get({
+    chrome.storage.sync.get({
       favoriteColor: 'red',
       likesColor: true
     }, function(items) {
@@ -64,9 +64,18 @@ function createListWidget(urls) {
 }
 
 
-
+function changeAllUrls(urls) {
+  chrome.storage.sync.set({
+    "otomation_urls": urls
+  });
+  document.querySelector('#tasks').innerHTML=""
+  for (const url of urls) {
+    appendToList(url)
+  }
+  
+}
 function addurl(url) {
-  chrome.storage.local.get("otomation_urls", function (data) {
+  chrome.storage.sync.get("otomation_urls", function (data) {
     var urls = []
     if (data && data.otomation_urls && data.otomation_urls.length > 0)
       urls = data.otomation_urls
@@ -74,21 +83,21 @@ function addurl(url) {
 
     urls.push(url)
     console.log(urls)
-    chrome.storage.local.set({
+    chrome.storage.sync.set({
       "otomation_urls": urls
     });
     appendToList(url)
   });
 }
 function removeUrl(url) {
-  chrome.storage.local.get("otomation_urls", function (data) {
+  chrome.storage.sync.get("otomation_urls", function (data) {
     if (!data || !data.otomation_urls || data.otomation_urls.length == 0) return
     var urls = data.otomation_urls
     if (!urls.includes(url)) return
     urls = urls.filter(function (item) {
       return item !== url
     })
-    chrome.storage.local.set({
+    chrome.storage.sync.set({
       "otomation_urls": urls
     });
   });
@@ -104,11 +113,55 @@ document.querySelector('#push').onclick = function () {
     addurl(url)
   }
 }
+document.querySelector('#export').onclick = function () {
+  chrome.storage.sync.get("otomation_urls", function (data) {
+    var saveData = (function () {
+      var a = document.createElement("a");
+      document.body.appendChild(a);
+      a.style = "display: none";
+      return function (data, fileName) {
+        var json = JSON.stringify(data),
+          blob = new Blob([json], { type: "octet/stream" }),
+          url = window.URL.createObjectURL(blob);
+        a.href = url;
+        a.download = fileName;
+        a.click();
+        window.URL.revokeObjectURL(url);
+      };
+    }());
 
+    fileName = "backup_colab_free_checker.json";
+    saveData(data, fileName);
+  });
+}
+document.querySelector('#import').onclick = async function () {
+  let fileHandle;
+  const pickerOpts = {
+    types: [
+      {
+        description: "JSON",
+        accept: {
+          "JSON/*": [".json"],
+        },
+      },
+    ],
+    excludeAcceptAllOption: true,
+    multiple: false,
+  };
+  [fileHandle] = await window.showOpenFilePicker(pickerOpts);
+  const file = await fileHandle.getFile();
+  const contents = await file.text();
+  console.log(fileHandle)
+  console.log(file)
+  console.log(contents)
+  data = JSON.parse(contents)
+  console.log(data)
+  changeAllUrls(data.otomation_urls)
+}
 
 function restore_options() {
   // Use default value color = 'red' and likesColor = true.
-  chrome.storage.local.get("otomation_urls", function (data) {
+  chrome.storage.sync.get("otomation_urls", function (data) {
 
     var urls = data?.otomation_urls
     console.log(data)

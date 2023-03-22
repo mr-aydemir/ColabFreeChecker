@@ -56,6 +56,10 @@ body{
     border-radius: 5px;
     font-family: 'Poppins',sans-serif;
 }
+#newtask button.left{
+    float: left;
+    margin: 0px 10px 10px 0px;
+}
 #tasks{
     border-radius: 10px;
     width: 100%;

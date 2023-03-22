@@ -47,7 +47,7 @@ function goNext(tab) {
     if (url.includes("#"))
         url = url.split("#")[0]
 
-    chrome.storage.local.get("otomation_urls", function (data) {
+    chrome.storage.sync.get("otomation_urls", function (data) {
         var urls = []
         console.log(url)
         if (data && data.otomation_urls && data.otomation_urls.length > 0)

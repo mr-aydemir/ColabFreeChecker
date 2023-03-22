@@ -32,7 +32,7 @@ function addUrl_to_otomasyon() {
 
     chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
         var url = tabs[0].url.split("#")[0]
-        chrome.storage.local.get("otomation_urls", function (data) {
+        chrome.storage.sync.get("otomation_urls", function (data) {
             var urls = []
             if (data && data.otomation_urls && data.otomation_urls.length > 0)
                 urls = data.otomation_urls
@@ -40,7 +40,7 @@ function addUrl_to_otomasyon() {
 
             urls.push(url)
             console.log(urls)
-            chrome.storage.local.set({
+            chrome.storage.sync.set({
                 "otomation_urls": urls
             });
             document.getElementById('add_url').hidden = true
@@ -53,14 +53,14 @@ function addUrl_to_otomasyon() {
 function removeUrl_from_otomasyon() {
     chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
         var url = tabs[0].url.split("#")[0]
-        chrome.storage.local.get("otomation_urls", function (data) {
+        chrome.storage.sync.get("otomation_urls", function (data) {
             if (!data || !data.otomation_urls || data.otomation_urls.length == 0) return
             var urls = data.otomation_urls
             if (!urls.includes(url)) return
             urls = urls.filter(function (item) {
                 return item !== url
             })
-            chrome.storage.local.set({
+            chrome.storage.sync.set({
                 "otomation_urls": urls
             });
             document.getElementById('add_url').hidden = false
@@ -71,10 +71,10 @@ function removeUrl_from_otomasyon() {
 }
 function start() {
     chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-        chrome.storage.local.get("last_otomation_url", function (last_otomation_url) {
-            chrome.storage.local.get("otomation_urls", function (automation_urls) {
-                url=last_otomation_url
-                if(!url) url=otomation_urls[0]
+        chrome.storage.sync.get("last_otomation_url", function (last_otomation_url) {
+            chrome.storage.sync.get("otomation_urls", function (automation_urls) {
+                url=last_otomation_url.last_otomation_url
+                if(!url) url=automation_urls.automation_urls[0]
                 setText({ type: "FROM_PAGE", state: "LOADING", offline_count: 0, activated: true })
                 port = chrome.tabs.connect(tabs[0].id, { name: "toogleActivity" });
                 port.postMessage({ enable: true, otomation: true });
@@ -120,13 +120,13 @@ window.onload = function () {
             document.getElementById('start').hidden = true
             return
         }
-        chrome.storage.local.get("otomation_urls", function (data) {
+        chrome.storage.sync.get("otomation_urls", function (data) {
 
             console.log(data)
             if (!data || !data.otomation_urls || data.otomation_urls.length == 0) return
             var urls = data.otomation_urls
             console.log(urls)
-            chrome.storage.local.get("last_otomation_url", function (last_otomation_url) {
+            chrome.storage.sync.get("last_otomation_url", function (last_otomation_url) {
                 if (!last_otomation_url) return
                 if (url && urls.includes(last_otomation_url))
                     document.getElementById('continue').hidden = false

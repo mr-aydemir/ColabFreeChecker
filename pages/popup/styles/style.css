@@ -14,16 +14,16 @@ body {
   background: rgba(255, 255, 255, 0.633);
   border: none;
 }
-.blue{
+
+.blue {
   background: rgba(43, 112, 231, 0.633);
   color: white;
 }
 
-.green{
+.green {
   background: rgba(43, 231, 178, 0.633);
   color: white;
 }
-
 
 .footer_button:hover {
   background-color: white;

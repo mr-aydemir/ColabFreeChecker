@@ -216,7 +216,7 @@ function otomation() {
     var url=document.URL
     if (url.includes("#"))
         url = url.split("#")[0]
-    chrome.storage.local.set({
+    chrome.storage.sync.set({
         "last_otomation_url": url
     });
     
