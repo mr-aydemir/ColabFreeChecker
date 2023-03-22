@@ -310,6 +310,7 @@ sendMessage("LOAD_COMPLETED")
 are_you_there_click_loaded = false
 if (!are_you_there_click_loaded) {
     var s = document.createElement('are_you_there_click');
-    s.src = chrome.runtime.getURL('/js/are_you_there_click.js');
+    s.src = chrome.runtime.getURL('are_you_there_click.js');
     (document.head || document.documentElement).appendChild(s);
+    console.log("Script loading...");
 } 

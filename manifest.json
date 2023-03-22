@@ -40,7 +40,7 @@
     "web_accessible_resources": [
         {
             "resources": [
-                "/js/are_you_there_click.js"
+                "are_you_there_click.js"
             ],
             "matches": [
                 "https://colab.research.google.com/*"
