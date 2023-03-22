@@ -71,33 +71,19 @@ function removeUrl_from_otomasyon() {
 }
 function start() {
     chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-        setText({ type: "FROM_PAGE", state: "LOADING", offline_count: 0, activated: true })
-        port = chrome.tabs.connect(tabs[0].id, { name: "toogleActivity" });
-        port.postMessage({ enable: true, otomation: true });
-    });
-}
-function continue_from_last() {
-    chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
         chrome.storage.local.get("last_otomation_url", function (last_otomation_url) {
-            chrome.tabs.update(tabs[0].id, { url: last_otomation_url });
-            var enabled = true
-            chrome.tabs.onUpdated.addListener(function doOto(tabId, info) {
-                if (info.status === 'complete' && tabId == tabs[0].id && enabled) {
-                    setText({ type: "FROM_PAGE", state: "LOADING", offline_count: 0, activated: true })
-                    const port = chrome.tabs.connect(tabs[0].id, { name: "toogleActivity" });
-                    port.postMessage({ enable: true, otomation: true });
-                    chrome.tabs.onUpdated.removeListener(doOto);
-                    enabled = false
-                }
+            chrome.storage.local.get("otomation_urls", function (automation_urls) {
+                url=last_otomation_url
+                if(!url) url=otomation_urls[0]
+                setText({ type: "FROM_PAGE", state: "LOADING", offline_count: 0, activated: true })
+                port = chrome.tabs.connect(tabs[0].id, { name: "toogleActivity" });
+                port.postMessage({ enable: true, otomation: true });
             });
         });
-
     });
 }
 
 
-
-document.getElementById('continue').addEventListener('click', continue_from_last);
 document.getElementById('start').addEventListener('click', start);
 document.getElementById('add_url').addEventListener('click', addUrl_to_otomasyon);
 document.getElementById('remove_url').addEventListener('click', removeUrl_from_otomasyon);
