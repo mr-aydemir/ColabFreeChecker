@@ -6,7 +6,6 @@
         "default_popup": "/pages/popup/popup.html",
         "default_icon": "/assets/images/logo.png"
     },
-    
     "options_ui": {
         "page": "/pages/options/options.html",
         "open_in_tab": true
@@ -37,5 +36,15 @@
     "background": {
         "service_worker": "/js/service_worker.js",
         "type": "module"
-    }
+    },
+    "web_accessible_resources": [
+        {
+            "resources": [
+                "/js/are_you_there_click.js"
+            ],
+            "matches": [
+                "https://colab.research.google.com/*"
+            ]
+        }
+    ]
 }

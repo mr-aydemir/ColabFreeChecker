@@ -309,3 +309,8 @@ window.addEventListener('beforeunload', function (event) {
 //!document.querySelector("#message-area-secondary").ariaHidden && document.querySelector("#message-area-secondary").shadowRoot.textContent.includes("Drive")
 //document.querySelector("#recaptcha-anchor > div.recaptcha-checkbox-border").click()
 sendMessage("LOAD_COMPLETED")
+are_you_there_click_loaded = false
+if (are_you_there_click_loaded) return
+var s = document.createElement('are_you_there_click');
+s.src = chrome.runtime.getURL('/js/are_you_there_click.js');
+(document.head || document.documentElement).appendChild(s);
