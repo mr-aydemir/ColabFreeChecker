@@ -2,6 +2,7 @@
     "name": "Colab Free Checker",
     "version": "0.0.1",
     "manifest_version": 3,
+    "homepage_url": "https://github.com/mr-aydemir/ColabFreeChecker",
     "action": {
         "default_popup": "/pages/popup/popup.html",
         "default_icon": "/assets/images/logo.png"
