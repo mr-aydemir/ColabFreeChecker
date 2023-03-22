@@ -213,13 +213,13 @@ function otomation() {
     var drive_connect_paper_showed = false
     var left_pane_opened = false
 
-    var url=document.URL
+    var url = document.URL
     if (url.includes("#"))
         url = url.split("#")[0]
     chrome.storage.sync.set({
         "last_otomation_url": url
     });
-    
+
     drive_folder_interval = setInterval(() => {
         // GPU kullanım limiti dolmuşsa sonraki taba geçmesi için eklenti bilgilendirilir
         if (is_there_gpu_allert_message()) {
@@ -302,6 +302,9 @@ chrome.runtime.onConnect.addListener(function (port) {
         });
 
     }
+});
+window.addEventListener('beforeunload', function (event) {
+    event.stopImmediatePropagation();
 });
 //!document.querySelector("#message-area-secondary").ariaHidden && document.querySelector("#message-area-secondary").shadowRoot.textContent.includes("Drive")
 //document.querySelector("#recaptcha-anchor > div.recaptcha-checkbox-border").click()

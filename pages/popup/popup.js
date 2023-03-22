@@ -108,6 +108,7 @@ chrome.runtime.onMessage.addListener(
     }
 );
 
+
 window.onload = function () {
 
     chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
