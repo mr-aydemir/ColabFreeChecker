@@ -31,20 +31,20 @@
             "js": [
                 "/js/colab_free.js"
             ]
+        },
+        {
+            "world": "MAIN",
+            "js": [
+                "/js/are_you_there_click.js"
+            ],
+            "matches": [
+                "https://colab.research.google.com/*"
+            ],
+            "run_at": "document_start"
         }
     ],
     "background": {
         "service_worker": "/js/service_worker.js",
         "type": "module"
-    },
-    "web_accessible_resources": [
-        {
-            "resources": [
-                "are_you_there_click.js"
-            ],
-            "matches": [
-                "https://colab.research.google.com/*"
-            ]
-        }
-    ]
+    }
 }

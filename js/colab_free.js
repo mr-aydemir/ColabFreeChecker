@@ -307,7 +307,7 @@ chrome.runtime.onConnect.addListener(function (port) {
 //!document.querySelector("#message-area-secondary").ariaHidden && document.querySelector("#message-area-secondary").shadowRoot.textContent.includes("Drive")
 //document.querySelector("#recaptcha-anchor > div.recaptcha-checkbox-border").click()
 sendMessage("LOAD_COMPLETED")
-are_you_there_click_loaded = false
+/* are_you_there_click_loaded = false
 if (!are_you_there_click_loaded) {
     var s = document.createElement('are_you_there_click');
     s.src = chrome.runtime.getURL('are_you_there_click.js');
@@ -317,4 +317,4 @@ if (!are_you_there_click_loaded) {
     (document.head || document.documentElement).appendChild(s);
     console.log("Script loading...");
 
-} 
+}  */
