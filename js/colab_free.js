@@ -303,9 +303,7 @@ chrome.runtime.onConnect.addListener(function (port) {
 
     }
 });
-window.addEventListener('beforeunload', function (event) {
-    event.stopImmediatePropagation();
-});
+
 //!document.querySelector("#message-area-secondary").ariaHidden && document.querySelector("#message-area-secondary").shadowRoot.textContent.includes("Drive")
 //document.querySelector("#recaptcha-anchor > div.recaptcha-checkbox-border").click()
 sendMessage("LOAD_COMPLETED")
