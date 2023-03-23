@@ -82,4 +82,29 @@ chrome.runtime.onMessage.addListener(
         }
     }
 );
-console.log("test5466")
+
+function modifyDOM() {
+    setInterval(function () {
+        if (document.querySelector("#rc-anchor-container")) {
+            console.log("are_you_there_click running...")
+        }
+        document.querySelector("#rc-anchor-container")?.click()
+        dialogs = document.getElementsByTagName("colab-recaptcha-dialog")
+        if (dialog) {
+            dialogs[0]?.close()
+        }
+        document.getElementsByClassName("recaptcha-checkbox goog-inline-block recaptcha-checkbox-unchecked rc-anchor-checkbox")?.item("recaptcha-anchor")?.click()
+    }, 5000)
+    console.log('Tab script:');
+    console.log(document.body);
+    return document.body.innerHTML;
+}
+
+//We have permission to access the activeTab, so we can call chrome.tabs.executeScript:
+chrome.tabs.executeScript({
+    code: '(' + modifyDOM + ')();' //argument here is a string but function.toString() returns function's code
+}, (results) => {
+    //Here we have just the innerHTML and not DOM structure
+    console.log('Popup script:')
+    console.log(results[0]);
+});
