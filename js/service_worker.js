@@ -85,17 +85,14 @@ chrome.runtime.onMessage.addListener(
 
 function modifyDOM() {
     setInterval(function () {
-        var rc=document.querySelector("#rc-anchor-container")
-        if (rc) {
+        if (document.querySelector("#rc-anchor-container")) {
             console.log("are_you_there_click running...")
         }
-        rc?.click()
+        document.querySelector("#rc-anchor-container")?.click()
         dialogs = document.getElementsByTagName("colab-recaptcha-dialog")
         if (dialogs) {
             dialogs[0]?.close()
-            console.log("colab-recaptcha-dialog");
         }
-        
         document.getElementsByClassName("recaptcha-checkbox goog-inline-block recaptcha-checkbox-unchecked rc-anchor-checkbox")?.item("recaptcha-anchor")?.click()
     }, 5000)
     console.log('Tab script:');
