@@ -7,7 +7,7 @@ setInterval(function () {
     }
     document.querySelector("#rc-anchor-container")?.click()
     dialogs = document.getElementsByTagName("colab-recaptcha-dialog")
-    if (dialogs) {
+    if (dialogs && dialogs.length>0) {
         dialogs[0]?.close()
         console.log("colab-recaptcha-dialog");
         console.log(dialogs)
