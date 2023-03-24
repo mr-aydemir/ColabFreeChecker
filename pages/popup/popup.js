@@ -114,6 +114,7 @@ chrome.runtime.onMessage.addListener(
                 return
             const state = request
             setText(state)
+            console.log(state)
         });
     }
 );
