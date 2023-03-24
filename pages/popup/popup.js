@@ -113,8 +113,8 @@ chrome.runtime.onMessage.addListener(
             if (sender.tab.id !== tabs[0].id)
                 return
             const state = request
-            setText(state)
             console.log(state)
+            setText(state)
         });
     }
 );
