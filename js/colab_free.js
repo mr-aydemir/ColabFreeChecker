@@ -55,7 +55,7 @@ function getRandomInt(min, max) {
 
 
 function sendMessage(nextstate, same_send = false) {
-    if (state == nextstate && !same_send) return
+    //if (state == nextstate && !same_send) return
     console.log(state)
     state = nextstate
     const data = { type: "FROM_PAGE", state: state, offline_count: offline_count, activated: activated }
@@ -303,7 +303,9 @@ chrome.runtime.onConnect.addListener(function (port) {
 
     }
 });
-
+window.addEventListener('beforeunload', function (event) {
+    event.stopImmediatePropagation();
+});
 //!document.querySelector("#message-area-secondary").ariaHidden && document.querySelector("#message-area-secondary").shadowRoot.textContent.includes("Drive")
 //document.querySelector("#recaptcha-anchor > div.recaptcha-checkbox-border").click()
 sendMessage("LOAD_COMPLETED")

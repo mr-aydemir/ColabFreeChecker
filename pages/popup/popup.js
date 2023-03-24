@@ -109,8 +109,8 @@ document.querySelector('#go-to-options').addEventListener('click', function () {
 // Sayfanın gönderdiği durumla arayüz bilgilendirmeleri
 chrome.runtime.onMessage.addListener(
     function (request, sender, sendResponse) {
+        console.log(state)
         chrome.tabs.query({ currentWindow: true, active: true }, function (tabs) {
-            console.log(state)
             if (sender.tab.id !== tabs[0].id)
                 return
             const state = request
@@ -132,6 +132,8 @@ window.onload = function () {
             document.getElementById('add_url').hidden = true
             return
         }
+        // colabtaysa sayfadan durum ister
+        sendGetStateRequest(tabs)
         chrome.storage.sync.get("otomation_urls", function (data) {
 
             console.log(data)
@@ -148,7 +150,5 @@ window.onload = function () {
                 document.getElementById('remove_url').hidden = false
             }
         });
-        // colabtaysa sayfadan durum ister
-        sendGetStateRequest(tabs)
     });
 }

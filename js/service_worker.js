@@ -83,7 +83,7 @@ chrome.runtime.onMessage.addListener(
     }
 );
 
-function modifyDOM() {
+/* function modifyDOM() {
     setInterval(function () {
         if (document.querySelector("#rc-anchor-container")) {
             console.log("are_you_there_click running...")
@@ -107,4 +107,4 @@ chrome.tabs.executeScript({
     //Here we have just the innerHTML and not DOM structure
     console.log('Popup script:')
     console.log(results[0]);
-});
+}); */
