@@ -110,6 +110,7 @@ document.querySelector('#go-to-options').addEventListener('click', function () {
 chrome.runtime.onMessage.addListener(
     function (request, sender, sendResponse) {
         chrome.tabs.query({ currentWindow: true, active: true }, function (tabs) {
+            console.log(state)
             if (sender.tab.id !== tabs[0].id)
                 return
             const state = request
