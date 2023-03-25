@@ -7,8 +7,8 @@ import pyautogui as pg
 
 
 screenshot=pg.screenshot()
-screenshot=cv2.cvtColor(np.array(screenshot), cv2.COLOR_RGB2BGR) """
-""" from tkinter import *
+screenshot=cv2.cvtColor(np.array(screenshot), cv2.COLOR_RGB2BGR)
+from tkinter import *
 
 #Create an instance of tkinter frame
 win= Tk()
