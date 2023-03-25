@@ -34,7 +34,7 @@ while True:
         pg.click(screen_width/2, screen_height/2)
         print("clicking center of screen...")
     
-    time.sleep(10)
+    time.sleep(60)
 
 
 
