@@ -11,7 +11,7 @@ screenshot=cv2.cvtColor(np.array(screenshot), cv2.COLOR_RGB2BGR) """
 
 while True:
     time.sleep(10)
-    robo=pg.locateOnScreen('white_robo.png')
+    robo=pg.locateOnScreen('dark_robo.png', grayscale=True, confidence=0.4)
     if robo is not None:
         pg.click(robo.left+robo.width/2, robo.top+robo.height/2)
         print("clicking...", robo.left+robo.width/2, robo.top+robo.height/2)
