@@ -1,3 +1,4 @@
 pyautogui
 numpy
-cv2
+opencv-python
+tkinter
