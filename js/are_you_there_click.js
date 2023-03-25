@@ -10,7 +10,7 @@ setInterval(function () {
     if (dialogs && dialogs.length>0) {
         console.log("colab-recaptcha-dialog");
         console.log(dialogs)
-        dialogs[0]?.close()
+        //dialogs[0]?.close()
     }
     document.getElementsByClassName("recaptcha-checkbox goog-inline-block recaptcha-checkbox-unchecked rc-anchor-checkbox")?.item("recaptcha-anchor")?.click()
 }, 5000)
