@@ -14,6 +14,7 @@ while True:
     robo=pg.locateOnScreen('white_robo.png')
     if robo is not None:
         pg.click(robo.left+robo.width/2, robo.top+robo.height/2)
+        print("clicking...", robo.left+robo.width/2, robo.top+robo.height/2)
 
 
 
