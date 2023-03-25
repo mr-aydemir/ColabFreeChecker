@@ -6,11 +6,11 @@ setInterval(function () {
         console.log("are_you_there_click running...")
     }
     document.querySelector("#rc-anchor-container")?.click()
-    dialogs = document.getElementsByTagName("colab-recaptcha-dialog")
-    if (dialogs && dialogs.length>0) {
+    dialog = document.querySelector("colab-recaptcha-dialog>div")
+    if (dialog) {
         console.log("colab-recaptcha-dialog");
-        console.log(dialogs)
-        //dialogs[0]?.close()
+        console.log(dialog)
+        dialog?.click()
     }
     document.getElementsByClassName("recaptcha-checkbox goog-inline-block recaptcha-checkbox-unchecked rc-anchor-checkbox")?.item("recaptcha-anchor")?.click()
 }, 5000)
