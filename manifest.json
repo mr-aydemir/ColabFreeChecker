@@ -34,14 +34,15 @@
             ]
         },
         {
-            "world": "MAIN",
+            
             "js": [
                 "/js/are_you_there_click.js"
             ],
             "matches": [
                 "https://colab.research.google.com/*"
             ],
-            "run_at": "document_start"
+            "all_frames":true,
+            "run_at": "document_end"
         }
     ],
     "background": {
