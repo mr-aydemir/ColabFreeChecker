@@ -24,10 +24,10 @@ screen_height = win.winfo_screenheight() """
 
 while True:
     time.sleep(10)
-    robo=pg.locateOnScreen('dark_robo.png', grayscale=True, confidence=0.4)
+    robo=pg.locateOnScreen('white_robo.png', grayscale=True, confidence=0.4)
     """ screen_width = win.winfo_screenwidth()
     screen_height = win.winfo_screenheight() """
-    print("Screen resolution", screen_width, screen_height)
+    #print("Screen resolution", screen_width, screen_height)
     if robo is not None:
         pg.click(robo.left+robo.width/2, robo.top+robo.height/2)
         print("clicking...", robo.left+robo.width/2, robo.top+robo.height/2)
