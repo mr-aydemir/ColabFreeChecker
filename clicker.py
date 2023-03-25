@@ -24,7 +24,7 @@ screen_height = win.winfo_screenheight() """
 
 while True:
     time.sleep(10)
-    robo=pg.locateOnScreen('white_robo.png', grayscale=True, confidence=0.4)
+    robo=pg.locateOnScreen('white_robo.png', grayscale=True, confidence=0.5)
     """ screen_width = win.winfo_screenwidth()
     screen_height = win.winfo_screenheight() """
     #print("Screen resolution", screen_width, screen_height)
