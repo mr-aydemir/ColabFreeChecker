@@ -8,7 +8,7 @@ import pyautogui as pg
 
 screenshot=pg.screenshot()
 screenshot=cv2.cvtColor(np.array(screenshot), cv2.COLOR_RGB2BGR) """
-from tkinter import *
+""" from tkinter import *
 
 #Create an instance of tkinter frame
 win= Tk()
@@ -18,15 +18,15 @@ win.geometry("650x250")
 
 #Get the current screen width and height
 screen_width = win.winfo_screenwidth()
-screen_height = win.winfo_screenheight()
+screen_height = win.winfo_screenheight() """
 
 
 
 while True:
     time.sleep(10)
     robo=pg.locateOnScreen('dark_robo.png', grayscale=True, confidence=0.4)
-    screen_width = win.winfo_screenwidth()
-    screen_height = win.winfo_screenheight()
+    """ screen_width = win.winfo_screenwidth()
+    screen_height = win.winfo_screenheight() """
     print("Screen resolution", screen_width, screen_height)
     if robo is not None:
         pg.click(robo.left+robo.width/2, robo.top+robo.height/2)
