@@ -6,7 +6,7 @@ setInterval(function () {
         console.log("are_you_there_click running...")
     }
     document.querySelector("#rc-anchor-container")?.click()
-    dialog = document.querySelector("colab-recaptcha-dialog>div")
+    dialog = document.querySelector("colab-recaptcha-dialog>div>div>iframe")?.contentWindow.document
     if (dialog) {
         console.log("colab-recaptcha-dialog");
         console.log(dialog)
