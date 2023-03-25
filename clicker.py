@@ -23,7 +23,6 @@ screen_height = win.winfo_screenheight()
 
 
 while True:
-    time.sleep(10)
     robo=pg.locateOnScreen('white_robo.png', grayscale=True, confidence=0.5)
     #print("Screen resolution", screen_width, screen_height)
     if robo is not None:
@@ -34,6 +33,8 @@ while True:
         screen_height = win.winfo_screenheight()
         pg.click(screen_width/2, screen_height/2)
         print("clicking center of screen...")
+    
+    time.sleep(10)
 
 
 
