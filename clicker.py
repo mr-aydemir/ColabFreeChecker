@@ -29,7 +29,7 @@ while True:
         pg.click(robo.left+robo.width/2, robo.top+robo.height/2)
         print("robo clicking...", robo.left+robo.width/2, robo.top+robo.height/2)
     else:
-        robo=pg.locateOnScreen('reload.png', grayscale=True, confidence=0.5)
+        robo=pg.locateOnScreen('reload.png', confidence=0.5)
         if robo is not None:
             pg.click(robo.left+robo.width/2, robo.top+robo.height/2)
             print("reload clicking...", robo.left+robo.width/2, robo.top+robo.height/2)
