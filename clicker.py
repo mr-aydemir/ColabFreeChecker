@@ -43,7 +43,7 @@ while True:
         pg.press('s') # press s key
         pg.keyUp('ctrl') # release ctrl key """
     
-    time.sleep(20)
+    time.sleep(60)
 
 
 
