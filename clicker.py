@@ -27,18 +27,23 @@ while True:
     #print("Screen resolution", screen_width, screen_height)
     if robo is not None:
         pg.click(robo.left+robo.width/2, robo.top+robo.height/2)
-        print("clicking...", robo.left+robo.width/2, robo.top+robo.height/2)
+        print("robo clicking...", robo.left+robo.width/2, robo.top+robo.height/2)
     else:
-        screen_width = win.winfo_screenwidth()
-        screen_height = win.winfo_screenheight()
-        pg.click(screen_width/2, screen_height/2)
-        print("clicking center of screen...")
+        robo=pg.locateOnScreen('reload.png', grayscale=True, confidence=0.5)
+        if robo is not None:
+            pg.click(robo.left+robo.width/2, robo.top+robo.height/2)
+            print("reload clicking...", robo.left+robo.width/2, robo.top+robo.height/2)
+        else:
+            screen_width = win.winfo_screenwidth()
+            screen_height = win.winfo_screenheight()
+            pg.click(screen_width/2, screen_height/2)
+            print("clicking center of screen...")
 
-        pg.keyDown('ctrl') # hold ctrl key
+        """ pg.keyDown('ctrl') # hold ctrl key
         pg.press('s') # press s key
-        pg.keyUp('ctrl') # release ctrl key
+        pg.keyUp('ctrl') # release ctrl key """
     
-    time.sleep(60)
+    time.sleep(20)
 
 
 
