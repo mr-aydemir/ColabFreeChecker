@@ -3,39 +3,21 @@
 
 <head>
     <link rel="stylesheet" href="styles/reorder.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.0/font/bootstrap-icons.css">
     <title>Colab Notebook List Reorder</title>
 </head>
 
 <body>
     <div>
-        <section class="container">
-
-            <div class="list-item">
+        <section class="tasks" id="tasks">
+            <div class="list-item task">
+                <i class="bi bi-list"></i>
                 <div class="item-content">
-                    <span class="order">1</span> Alpha
+                    <span class="order">1</span> <span class="url">Alpha</span>
                 </div>
+                <button class="delete"><i class="bi bi-trash"></i></button>
             </div>
-
-            <div class="list-item">
-                <div class="item-content">
-                    <span class="order">2</span> Bravo
-                </div>
-            </div>
-
-            <div class="list-item">
-                <div class="item-content">
-                    <span class="order">3</span> Charlie
-                </div>
-            </div>
-
-            <div class="list-item">
-                <div class="item-content">
-                    <span class="order">4</span> Delta
-                </div>
-            </div>
-
         </section>
-        <div class="circle">+</div>
     </div>
     <script src="../../js/Draggable.min.js"></script>
     <script src="../../js/TweenMax.min.js"></script>

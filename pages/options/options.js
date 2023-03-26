@@ -1,83 +1,52 @@
-/* // Saves options to chrome.storage
-function save_options() {
-    var color = document.getElementById('color').value;
-    var likesColor = document.getElementById('like').checked;
+var listItems = Array.from(document.querySelectorAll(".list-item"));
+var rowSize = listItems[0].offsetHeight; // => container height / number of items
+var container = document.querySelector(".tasks");// Array of elements
+var sortables = listItems.map(Sortable); // Array of sortables
+var total = sortables.length;
+var urls = []
+
+
+TweenLite.to(container, 0.5, { autoAlpha: 1 });
+var listItems = []
+
+document.querySelector('#push').onclick = function () {
+  url = document.querySelector('#newtask input').value
+  if (url.length == 0 || !url.includes("colab") || urls.includes(url)) {
+    alert("Kindly Enter Task Name!!!!")
+  }
+
+  else {
+    addurl(url)
+  }
+}
+function onListChanged() {
+  listItems = Array.from(document.querySelectorAll(".list-item"));
+  rowSize = listItems[0].offsetHeight + 5; // => container height / number of items
+  container = document.querySelector(".tasks");// Array of elements
+  sortables = listItems.map(Sortable); // Array of sortables
+  total = sortables.length;
+  TweenLite.to(container, 0.5, { autoAlpha: 1 });
+  // Set index for each sortable
+  sortables.forEach((sortable, index) => sortable.setIndex(index));
+}
+
+function removeUrl(url) {
+  chrome.storage.sync.get("otomation_urls", function (data) {
+    if (!data || !data.otomation_urls || data.otomation_urls.length == 0) return
+    urls = data.otomation_urls
+    if (!urls.includes(url)) return
+    urls = urls.filter(function (item) {
+      return item !== url
+    })
     chrome.storage.sync.set({
-      favoriteColor: color,
-      likesColor: likesColor
-    }, function() {
-      // Update status to let user know options were saved.
-      var status = document.getElementById('status');
-      status.textContent = 'Options saved.';
-      setTimeout(function() {
-        status.textContent = '';
-      }, 750);
+      "otomation_urls": urls
     });
-  }
-  
-  // Restores select box and checkbox state using the preferences
-  // stored in chrome.storage.
-  function restore_options() {
-    // Use default value color = 'red' and likesColor = true.
-    chrome.storage.sync.get({
-      favoriteColor: 'red',
-      likesColor: true
-    }, function(items) {
-      document.getElementById('color').value = items.favoriteColor;
-      document.getElementById('like').checked = items.likesColor;
-    });
-  }
-  document.addEventListener('DOMContentLoaded', restore_options);
-  document.getElementById('save').addEventListener('click',
-      save_options); */
-
-
-function appendToList(url) {
-  document.querySelector('#tasks').innerHTML += `
-<div class="task">
-    <span id="taskname">${url}</span>
-    <button class="delete"><i class="bi bi-trash"></i></button>
-</div>
-`;
-  var current_tasks = document.querySelectorAll(".delete");
-  for (var i = 0; i < current_tasks.length; i++) {
-    current_tasks[i].onclick = function () {
-      console.log(this.parentNode.querySelector("#taskname").textContent)
-      removeUrl(this.parentNode.querySelector("#taskname").textContent)
-      this.parentNode.remove();
-    }
-  }
-  var current_tasks = document.querySelectorAll("#taskname");
-  for (var i = 0; i < current_tasks.length; i++) {
-    current_tasks[i].onclick = function () {
-      chrome.tabs.create({ "url": this.textContent });
-    }
-  }
-}
-
-function createListWidget(urls) {
-  if (!urls || urls.length == 0) return
-  document.querySelector('#tasks').innerHTML = ""
-  for (const url of urls) {
-    appendToList(url)
-  }
-}
-
-
-function changeAllUrls(urls) {
-  chrome.storage.sync.set({
-    "otomation_urls": urls
   });
-  document.querySelector('#tasks').innerHTML = ""
-  for (const url of urls) {
-    appendToList(url)
-  }
-
 }
 function addurl(url) {
   url = url.split("#")[0] ?? url
   chrome.storage.sync.get("otomation_urls", function (data) {
-    var urls = []
+    urls = []
     if (data && data.otomation_urls && data.otomation_urls.length > 0)
       urls = data.otomation_urls
     if (urls.includes(url)) return
@@ -90,30 +59,54 @@ function addurl(url) {
     appendToList(url)
   });
 }
-function removeUrl(url) {
-  chrome.storage.sync.get("otomation_urls", function (data) {
-    if (!data || !data.otomation_urls || data.otomation_urls.length == 0) return
-    var urls = data.otomation_urls
-    if (!urls.includes(url)) return
-    urls = urls.filter(function (item) {
-      return item !== url
-    })
-    chrome.storage.sync.set({
-      "otomation_urls": urls
-    });
+
+function changeAllUrls(_urls) {
+  urls = _urls
+  chrome.storage.sync.set({
+    "otomation_urls": urls
   });
-}
-
-document.querySelector('#push').onclick = function () {
-  url = document.querySelector('#newtask input').value
-  if (url.length == 0) {
-    alert("Kindly Enter Task Name!!!!")
+  document.querySelector('#tasks').innerHTML = ""
+  for (const url of urls) {
+    appendToList(url)
   }
 
-  else {
-    addurl(url)
+}
+
+function appendToList(url) {
+  document.querySelector('#tasks').innerHTML += `
+  <div class="list-item task">
+  <div class="item-content">
+      <span class="order">${listItems.length + 1}</span> <span class="url">${url}</span>
+  </div>
+  <button class="delete"><i class="bi bi-trash"></i></button>
+  <i class="bi bi-list"></i>
+</div>
+`;
+  onListChanged();
+  var current_tasks = document.querySelectorAll(".delete");
+  for (var i = 0; i < current_tasks.length; i++) {
+    current_tasks[i].onclick = function () {
+      console.log(this.parentNode.querySelector(".url").textContent)
+      removeUrl(this.parentNode.querySelector(".url").textContent)
+      this.parentNode.remove();
+      onListChanged();
+    }
+  }
+  var current_tasks = document.querySelectorAll(".url");
+  for (var i = 0; i < current_tasks.length; i++) {
+    current_tasks[i].onclick = function () {
+      chrome.tabs.create({ "url": this.textContent });
+    }
   }
 }
+function createListWidget(urls) {
+  if (!urls || urls.length == 0) return
+  document.querySelector('#tasks').innerHTML = ""
+  for (const url of urls) {
+    appendToList(url)
+  }
+}
+
 document.querySelector('#export').onclick = function () {
   chrome.storage.sync.get("otomation_urls", function (data) {
     var saveData = (function () {
@@ -160,13 +153,116 @@ document.querySelector('#import').onclick = async function () {
   changeAllUrls(data.otomation_urls)
 }
 
+
+
 function restore_options() {
   // Use default value color = 'red' and likesColor = true.
   chrome.storage.sync.get("otomation_urls", function (data) {
 
-    var urls = data?.otomation_urls
+    urls = data?.otomation_urls
     console.log(data)
     createListWidget(urls)
   });
 }
 document.addEventListener('DOMContentLoaded', restore_options);
+
+
+
+function changeIndex(item, to) {
+  // Change position in array
+  arrayMove(sortables, item.index, to);
+
+  // Change element's position in DOM. Not always necessary. Just showing how.
+  if (to === total - 1) {
+    container.appendChild(item.element);
+  } else {
+    var i = item.index > to ? to : to + 1;
+    container.insertBefore(item.element, container.children[i]);
+  }
+
+  // Set index for each sortable
+  sortables.forEach((sortable, index) => sortable.setIndex(index));
+
+}
+
+function dragend() {
+  urls = sortables.map((value, index, array) => value.element.querySelector(".url").textContent)
+
+  chrome.storage.sync.set({
+    "otomation_urls": urls
+  });
+  console.log(urls);
+}
+function Sortable(element, index) {
+  var content = element.querySelector(".item-content");
+  var order = element.querySelector(".order");
+
+  var animation = TweenLite.to(content, 0.3, {
+    boxShadow: "rgba(0,0,0,0.2)",
+    force3D: true,
+    scale: 1,
+    paused: true
+  });
+
+  var dragger = new Draggable(element, {
+    onDragStart: downAction,
+    onRelease: upAction,
+    onDrag: dragAction,
+    cursor: "inherit",
+    type: "y"
+  });
+
+  // Public properties and methods
+  var sortable = {
+    dragger: dragger,
+    element: element,
+    index: index,
+    setIndex: setIndex
+  };
+
+  TweenLite.set(element, { y: index * rowSize });
+
+  function setIndex(index) {
+    sortable.index = index;
+    order.textContent = index + 1;
+
+    // Don't layout if you're dragging
+    if (!dragger.isDragging) layout();
+  }
+
+  function downAction() {
+    animation.play();
+    this.update();
+  }
+
+  function dragAction() {
+    // Calculate the current index based on element's position
+    var index = clamp(Math.round(this.y / rowSize), 0, total - 1);
+
+    if (index !== sortable.index) {
+      changeIndex(sortable, index);
+    }
+  }
+
+  function upAction() {
+    animation.reverse();
+    layout();
+    dragend();
+  }
+
+  function layout() {
+    TweenLite.to(element, 0.3, { y: sortable.index * rowSize });
+  }
+
+  return sortable;
+}
+
+// Changes an elements's position in array
+function arrayMove(array, from, to) {
+  array.splice(to, 0, array.splice(from, 1)[0]);
+}
+
+// Clamps a value to a min/max
+function clamp(value, a, b) {
+  return value < a ? a : value > b ? b : value;
+}

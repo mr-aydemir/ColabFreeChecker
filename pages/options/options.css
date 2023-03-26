@@ -1,15 +1,17 @@
 *,
 *:before,
-*:after{
+*:after {
     padding: 0;
     margin: 0;
     box-sizing: border-box;
 }
-body{
+
+body {
     height: 100vh;
     background: #066acd;
 }
-.container{
+
+.container {
     width: 40%;
     top: 50%;
     left: 50%;
@@ -17,8 +19,8 @@ body{
     border-radius: 10px;
     min-width: 450px;
     position: absolute;
-    min-height: 100px;
-    transform: translate(-50%,-50%);
+    min-height: 600px;
+    transform: translate(-50%, -50%);
 }
 
 a.button {
@@ -30,11 +32,12 @@ a.button {
     color: initial;
 }
 
-#newtask{
+#newtask {
     position: relative;
     padding: 30px 20px;
 }
-#newtask input{
+
+#newtask input {
     width: 75%;
     height: 45px;
     padding: 12px;
@@ -42,16 +45,17 @@ a.button {
     font-weight: 500;
     position: relative;
     border-radius: 5px;
-    font-family: 'Poppins',sans-serif;
+    font-family: 'Poppins', sans-serif;
     font-size: 15px;
     border: 2px solid #d1d3d4;
 }
 
-#newtask input:focus{
+#newtask input:focus {
     outline: none;
     border-color: #0d75ec;
 }
-#newtask button{
+
+#newtask button {
     position: relative;
     float: right;
     font-weight: 500;
@@ -64,22 +68,35 @@ a.button {
     width: 20%;
     height: 45px;
     border-radius: 5px;
-    font-family: 'Poppins',sans-serif;
+    font-family: 'Poppins', sans-serif;
 }
-#newtask button.left{
+
+#newtask button.left {
     float: left;
     margin: 0px 10px 10px 0px;
 }
-#tasks{
-    border-radius: 10px;
+
+.list-item {
+    position: absolute;
+    top: 0;
+    left: 0;
     width: 100%;
-    position: relative;
-    background-color: #ffffff;
-    padding: 30px 20px;
-    margin-top: 10px;
 }
 
-.task{
+.item-content {
+    border: 0px solid rgba(123, 123, 123, 0.498039);
+    font-size: 18px;
+    font-weight: 400;
+
+}
+
+#tasks {
+    border-radius: 10px;
+    position: relative;
+    background-color: #ffffff;
+}
+
+.task {
     border-radius: 5px;
     align-items: center;
     justify-content: space-between;
@@ -90,13 +107,23 @@ a.button {
     margin-bottom: 8px;
     padding: 5px 10px;
     display: flex;
+
+
 }
-.task span{
-    font-family: 'Poppins',sans-serif;
+
+.task span {
+    font-family: 'Poppins', sans-serif;
     font-size: 15px;
     font-weight: 400;
+    user-drag: none;
+    -webkit-user-drag: none;
+    user-select: none;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
 }
-.task button{
+
+.task button {
     background-color: #6583e5;
     color: #ffffff;
     border: none;

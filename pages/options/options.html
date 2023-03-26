@@ -13,12 +13,21 @@
     <div id="newtask">
       <button class="left" id="export">Yedek Al</button>
       <button class="left" id="import">Yedek Yukle</button>
-      <a class="left button" href="../reorder/reorder.html"><button> Siralama Degiştir</button></a>
       <input type="text" placeholder="Bir colab notebook url'si yaz">
       <button id="push">Ekle</button>
     </div>
-    <div id="tasks"></div>
+    <section class="tasks" id="tasks">
+      <div class="list-item task">
+        <div class="item-content">
+          <span class="order">1</span> <span class="url">Alpha</span>
+        </div>
+        <button class="delete"><i class="bi bi-trash"></i></button>
+        <i class="bi bi-list"></i>
+      </div>
+    </section>
   </div>
+  <script src="../../js/Draggable.min.js"></script>
+  <script src="../../js/TweenMax.min.js"></script>
   <script src="options.js"></script>
 </body>
 
