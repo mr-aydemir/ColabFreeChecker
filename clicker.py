@@ -33,6 +33,10 @@ while True:
         screen_height = win.winfo_screenheight()
         pg.click(screen_width/2, screen_height/2)
         print("clicking center of screen...")
+
+        pg.keyDown('ctrl') # hold ctrl key
+        pg.press('s') # press s key
+        pg.keyUp('ctrl') # release ctrl key
     
     time.sleep(60)
 
