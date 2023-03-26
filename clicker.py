@@ -33,11 +33,11 @@ while True:
         if robo is not None:
             pg.click(robo.left+robo.width/2, robo.top+robo.height/2)
             print("reload clicking...", robo.left+robo.width/2, robo.top+robo.height/2)
-        else:
+        """ else:
             screen_width = win.winfo_screenwidth()
             screen_height = win.winfo_screenheight()
             pg.click(screen_width/2, screen_height/2)
-            print("clicking center of screen...")
+            print("clicking center of screen...") """
 
         """ pg.keyDown('ctrl') # hold ctrl key
         pg.press('s') # press s key
