@@ -75,11 +75,13 @@ function changeAllUrls(_urls) {
 function appendToList(url) {
   document.querySelector('#tasks').innerHTML += `
   <div class="list-item task">
-  <div class="item-content">
-      <span class="order">${listItems.length + 1}</span> <span class="url">${url}</span>
+  <span class="order">${listItems.length + 1}</span>
+  <div class="item-content"> <span class="url">${url}</span>
   </div>
-  <button class="delete"><i class="bi bi-trash"></i></button>
-  <i class="bi bi-list"></i>
+  <div class="icons">
+          <button class="delete"><i class="bi bi-trash"></i></button>
+          <i class="bi bi-list"></i>
+  </div>
 </div>
 `;
   onListChanged();
