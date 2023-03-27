@@ -135,6 +135,7 @@ function doOnline() {
 function check_offline() {
     // Gpu kullanım sınırı mesajı geldiyse sonraki taba geçmesi için eklentiye haber verilir.
     text=document.querySelector("#output-body > div:nth-child(3) > div > pre > span:last-child")?.textContent
+    console.log(text);
     if(text && text.includes("KeyboardInterrupt") && text.includes("^C")){
         //drive klasörü gelince eğer işlem çalışan bir işlem değilse çalıştırılır.
         if (!document.querySelector("colab-run-button")?.shadowRoot?.querySelector("div > div.cell-execution-indicator > iron-icon[icon='colab:stop-circle-filled']")) {
