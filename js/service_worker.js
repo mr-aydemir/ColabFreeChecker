@@ -72,7 +72,8 @@ function goNext(tab) {
                     enabled = false
                 }
                 else if (request.state == "LOAD_ERROR") {
-                    chrome.tabs.update(tab.id, { url: tab.url });
+                    goNext(tab)
+                    enabled = false
                 }
             }
         );
