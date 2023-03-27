@@ -62,14 +62,28 @@ function goNext(tab) {
         chrome.tabs.update(tab.id, { url: next });
         console.log(next)
         var enabled = true
-        chrome.tabs.onUpdated.addListener(function doOto(tabId, info) {
+        chrome.runtime.onMessage.addListener(
+            function doOto(request, sender, sendResponse) {
+                // GPU mesajından sonra tab değiştir isteği sayfadan gönderilir
+                if (request.state == "LOAD_COMPLETED" && tabId == tab.id && enabled) {
+                    const port = chrome.tabs.connect(tab.id, { name: "toogleActivity" });
+                    port.postMessage({ enable: true, otomation: true });
+                    chrome.tabs.onUpdated.removeListener(doOto);
+                    enabled = false
+                }
+                else if (request.state == "LOAD_ERROR") {
+                    chrome.tabs.update(tab.id, { url: tab.url });
+                }
+            }
+        );
+        /* chrome.tabs.onUpdated.addListener(function doOto(tabId, info) {
             if (info.status === 'complete' && tabId == tab.id && enabled) {
                 const port = chrome.tabs.connect(tab.id, { name: "toogleActivity" });
                 port.postMessage({ enable: true, otomation: true });
                 chrome.tabs.onUpdated.removeListener(doOto);
                 enabled = false
             }
-        });
+        }); */
     });
 }
 

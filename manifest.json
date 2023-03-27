@@ -31,17 +31,7 @@
             ],
             "js": [
                 "/js/colab_free.js"
-            ]
-        },
-        {
-            
-            "js": [
-                "/js/are_you_there_click.js"
             ],
-            "matches": [
-                "https://colab.research.google.com/*"
-            ],
-            "all_frames":true,
             "run_at": "document_end"
         }
     ],

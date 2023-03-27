@@ -38,7 +38,7 @@ function clickRamMessageOK() {
 }
 
 function clickFiles() {
-    document.querySelector(files_tab_query).click()
+    document.querySelector(files_tab_query)?.click()
 }
 function clickHiddenFiles() {
     document.querySelector(hidden_files_toggle).click()
@@ -227,10 +227,15 @@ function otomation() {
             return
         }
         // yan panel kapatılmışsa açılır, drive vs dosyaların görüntülenmesi için gereklidir.
+        if (document.querySelector("body > mwc-dialog > a")?.textContent.includes("Colab Pro")) {
+            clickRamMessageOK()
+        }
+
         if (!left_pane_opened) {
             if (is_left_pane_closed()) {
                 clickFiles()
-                left_pane_opened = true
+                if (document.querySelector(files_tab_query))
+                    left_pane_opened = true
                 return
             }
             left_pane_opened = true
@@ -306,17 +311,38 @@ chrome.runtime.onConnect.addListener(function (port) {
 window.addEventListener('beforeunload', function (event) {
     event.stopImmediatePropagation();
 });
-//!document.querySelector("#message-area-secondary").ariaHidden && document.querySelector("#message-area-secondary").shadowRoot.textContent.includes("Drive")
-//document.querySelector("#recaptcha-anchor > div.recaptcha-checkbox-border").click()
 sendMessage("LOAD_COMPLETED")
-/* are_you_there_click_loaded = false
-if (!are_you_there_click_loaded) {
-    var s = document.createElement('are_you_there_click');
-    s.src = chrome.runtime.getURL('are_you_there_click.js');
-    s.onload = function() {
-        this.remove();
-    };
-    (document.head || document.documentElement).appendChild(s);
-    console.log("Script loading...");
 
-}  */
+// Place in header (do not use async or defer)
+/* document.addEventListener('readystatechange', event => {
+    switch (document.readyState) {
+      case "loading":
+        console.log("document.readyState: ", document.readyState,
+         `- The document is still loading.`
+         );
+        break;
+      case "interactive":
+        console.log("document.readyState: ", document.readyState, 
+          `- The document has finished loading DOM. `,
+          `- "DOMContentLoaded" event`
+          );
+        break;
+      case "complete":
+        console.log("document.readyState: ", document.readyState, 
+          `- The page DOM with Sub-resources are now fully loaded. `,
+          `- "load" event`
+          );
+        break;
+    }
+  }); */
+
+window.addEventListener("load", function (ev) {
+    this.setTimeout(function () {
+        if (document.querySelector(".colab-large-icon")) {
+            sendMessage("LOAD_COMPLETED")
+            return
+        }
+        sendMessage("LOAD_ERROR")
+    }, 2000)
+
+})
