@@ -224,6 +224,7 @@ function otomation() {
     chrome.storage.sync.set({
         "last_otomation_url": url
     });
+    otomation_enabled=true
 
     drive_folder_interval = setInterval(() => {
         // GPU kullanım limiti dolmuşsa sonraki taba geçmesi için eklenti bilgilendirilir
