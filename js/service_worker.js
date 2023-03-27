@@ -65,7 +65,7 @@ function goNext(tab) {
         chrome.runtime.onMessage.addListener(
             function doOto(request, sender, sendResponse) {
                 // GPU mesajından sonra tab değiştir isteği sayfadan gönderilir
-                if (request.state == "LOAD_COMPLETED" && tabId == tab.id && enabled) {
+                if (request.state == "LOAD_COMPLETED" && sender.tab.id == tab.id && enabled) {
                     const port = chrome.tabs.connect(tab.id, { name: "toogleActivity" });
                     port.postMessage({ enable: true, otomation: true });
                     chrome.tabs.onUpdated.removeListener(doOto);
