@@ -70,10 +70,12 @@ function goNext(tab) {
                     port.postMessage({ enable: true, otomation: true });
                     chrome.tabs.onUpdated.removeListener(doOto);
                     enabled = false
+                    console.log(next)
                 }
                 else if (request.state == "LOAD_ERROR") {
                     goNext(tab)
                     enabled = false
+                    console.log(next)
                 }
             }
         );
