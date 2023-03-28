@@ -34,7 +34,7 @@ def robo_click():
             print("reload clicking...", robo.left+robo.width/2, robo.top+robo.height/2)
 
 def leave_click():
-    area=pg.locateOnScreen('white_robo.png', grayscale=True, confidence=0.5)
+    area=pg.locateOnScreen('leave.png', grayscale=True, confidence=0.5)
     if area is not None:
         pg.click(area.left+area.width/2, area.top+area.height/2)
         print("leave clicking... ",area.left+area.width/2, area.top+area.height/2)
