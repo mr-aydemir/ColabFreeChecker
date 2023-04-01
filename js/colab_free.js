@@ -314,9 +314,9 @@ chrome.runtime.onConnect.addListener(function (port) {
 
     }
 });
-window.addEventListener('beforeunload', function (event) {
+/* window.addEventListener('beforeunload', function (event) {
     event.stopImmediatePropagation();
-});
+}); */
 sendMessage("LOAD_COMPLETED")
 
 // Place in header (do not use async or defer)
