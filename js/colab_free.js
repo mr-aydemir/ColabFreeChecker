@@ -135,9 +135,12 @@ function doOnline() {
     }
     else sendMessage("ONLINE")
 }
-function check_offline() {
+async function check_offline() {
     // Gpu kullanım sınırı mesajı geldiyse sonraki taba geçmesi için eklentiye haber verilir.
-
+    if (document.querySelector("colab-recaptcha-dialog")) {
+        await click_robo()
+        return
+    }
     if (is_there_gpu_allert_message()) {
         sendMessage("NEXT_TAB")
         set_enable(false)
@@ -180,14 +183,11 @@ function set_enable(value) {
     if (value) {
         // aktif interval
         activeInterval = setInterval(async function () {
-            // Burada mısınız mesajı gelmişse tıklanır
-            await click_robo()
             // offline kontrolcüsü
             check_offline()
             // 10-20 sn bir etkileşim yapan fonksyon
         }, 1000)
         interval = setInterval(function () {
-            console.log("working")
             var selector = "#top-toolbar > colab-connect-button"
             document.querySelector(selector).shadowRoot.querySelector("#connect").click()
             setTimeout(function () {
@@ -233,7 +233,11 @@ function otomation() {
             sendMessage("NEXT_TAB")
             return
         }
-        await click_robo()
+        if (document.querySelector("colab-recaptcha-dialog")) {
+            await click_robo()
+            return
+        }
+        
         // yan panel kapatılmışsa açılır, drive vs dosyaların görüntülenmesi için gereklidir.
         if (document.querySelector("body > mwc-dialog > a")?.textContent.includes("Colab Pro")) {
             clickRamMessageOK()
@@ -316,33 +320,7 @@ chrome.runtime.onConnect.addListener(function (port) {
 
     }
 });
-/* window.addEventListener('beforeunload', function (event) {
-    event.stopImmediatePropagation();
-}); */
 sendMessage("LOAD_COMPLETED")
-
-// Place in header (do not use async or defer)
-/* document.addEventListener('readystatechange', event => {
-    switch (document.readyState) {
-      case "loading":
-        console.log("document.readyState: ", document.readyState,
-         `- The document is still loading.`
-         );
-        break;
-      case "interactive":
-        console.log("document.readyState: ", document.readyState, 
-          `- The document has finished loading DOM. `,
-          `- "DOMContentLoaded" event`
-          );
-        break;
-      case "complete":
-        console.log("document.readyState: ", document.readyState, 
-          `- The page DOM with Sub-resources are now fully loaded. `,
-          `- "load" event`
-          );
-        break;
-    }
-  }); */
 
 window.addEventListener("load", function (ev) {
     this.setTimeout(function () {
