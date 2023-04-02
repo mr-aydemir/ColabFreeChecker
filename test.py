@@ -11,3 +11,5 @@ if area is not None:
     """ cv2.rectangle(screenshot, (area.left, area.top), (area.left+area.width, area.top+area.height), (0,255,255),2)
     cv2.imshow("robo", screenshot)
     cv2.waitKey(0) """
+cv2.imshow("robo", screenshot)
+cv2.waitKey(0)

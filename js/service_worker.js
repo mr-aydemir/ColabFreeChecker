@@ -47,7 +47,7 @@ function goNext(tab) {
     if (url.includes("#"))
         url = url.split("#")[0]
 
-    chrome.storage.sync.get("otomation_urls", function (data) {
+    chrome.storage.sync.get("otomation_urls", async function (data) {
         var urls = []
         console.log(url)
         if (data && data.otomation_urls && data.otomation_urls.length > 0)
@@ -60,6 +60,9 @@ function goNext(tab) {
         console.log(next)
         if (!next) return
         chrome.tabs.update(tab.id, { url: next });
+        await fetch("http://127.0.0.1:5000/click_leave", {
+            method: 'GET'
+        });
         console.log(next)
         var enabled = true
         chrome.runtime.onMessage.addListener(

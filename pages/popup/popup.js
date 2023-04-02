@@ -71,12 +71,15 @@ function removeUrl_from_otomasyon() {
 }
 
 function start() {
-    chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+    chrome.tabs.query({ active: true, currentWindow: true },  function (tabs) {
         chrome.storage.sync.get("last_otomation_url", function (last_otomation_url) {
-            chrome.storage.sync.get("otomation_urls", function (data) {
+            chrome.storage.sync.get("otomation_urls", async function (data) {
                 url = last_otomation_url.last_otomation_url
                 if (!url) url = data.otomation_urls[0]
                 chrome.tabs.update(tabs[0].id, { url: url });
+                await fetch("http://127.0.0.1:5000/click_leave", {
+                    method: 'GET'
+                });
                 var enabled = true
                 chrome.tabs.onUpdated.addListener(function doOto(tabId, info) {
                     if (info.status === 'complete' && tabId == tabs[0].id && enabled) {

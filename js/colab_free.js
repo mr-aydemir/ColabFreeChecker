@@ -178,9 +178,13 @@ var activeInterval = null
 function set_enable(value) {
     if (value) {
         // aktif interval
-        activeInterval = setInterval(function () {
+        activeInterval = setInterval(async function () {
             // Burada mısınız mesajı gelmişse tıklanır
-            recaptcha()?.click()
+            if (document.querySelector("colab-recaptcha-dialog")) {
+                await fetch("http://127.0.0.1:5000/click_robo", {
+                    method: 'GET'
+                });
+            }
             // offline kontrolcüsü
             check_offline()
             // 10-20 sn bir etkileşim yapan fonksyon
@@ -224,7 +228,7 @@ function otomation() {
     chrome.storage.sync.set({
         "last_otomation_url": url
     });
-    otomation_enabled=true
+    otomation_enabled = true
 
     drive_folder_interval = setInterval(() => {
         // GPU kullanım limiti dolmuşsa sonraki taba geçmesi için eklenti bilgilendirilir

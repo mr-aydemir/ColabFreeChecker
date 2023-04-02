@@ -22,7 +22,8 @@
         "storage"
     ],
     "host_permissions": [
-        "https://colab.research.google.com/*"
+        "https://colab.research.google.com/*",
+        "http://127.0.0.1:5000/*"
     ],
     "content_scripts": [
         {
@@ -33,21 +34,13 @@
                 "/js/colab_free.js"
             ],
             "run_at": "document_end"
-        },
-        {
-            "world": "MAIN",
-            "js": [
-                "/js/are_you_there_click.js"
-            ],
-            "matches": [
-                "https://colab.research.google.com/*"
-            ],
-            "all_frames": true,
-            "run_at": "document_end"
         }
     ],
     "background": {
         "service_worker": "/js/service_worker.js",
         "type": "module"
+    },
+    "externally_connectable": {
+        "matches": ["*://localhost/*", "file:///*"]
     }
 }
