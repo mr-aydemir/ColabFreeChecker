@@ -32,7 +32,7 @@ def click_robo():
     return click('white_robo.png', grayscale=True, confidence=0.5, cx=0.1)
 
 @app.route('/click_reload')
-def click_robo():
+def click_reload():
     return click('reload.png', grayscale=True, confidence=0.5)
 
 
