@@ -8,3 +8,8 @@ async function click_robo() {
         method: 'GET'
     });
 }
+function format_colab_url(url) {
+    if (url.includes("#"))
+        url = url.split("#")[0]
+    return url
+}

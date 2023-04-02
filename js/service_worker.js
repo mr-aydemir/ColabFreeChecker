@@ -1,4 +1,4 @@
-import {click_leave} from './helper.js';
+import {click_leave,format_colab_url} from './helper.js';
 
 function get_next_url(urls, url) {
     const t_index = urls.indexOf(url);
@@ -10,9 +10,7 @@ function get_next_url(urls, url) {
     return next_tab
 }
 function goNext(tab) {
-    var url = tab.url
-    if (url.includes("#"))
-        url = url.split("#")[0]
+    var url = format_colab_url(tab.url)
 
     chrome.storage.sync.get("otomation_urls", async function (data) {
         var urls = []
@@ -47,14 +45,6 @@ function goNext(tab) {
                 }
             }
         );
-        /* chrome.tabs.onUpdated.addListener(function doOto(tabId, info) {
-            if (info.status === 'complete' && tabId == tab.id && enabled) {
-                const port = chrome.tabs.connect(tab.id, { name: "toogleActivity" });
-                port.postMessage({ enable: true, otomation: true });
-                chrome.tabs.onUpdated.removeListener(doOto);
-                enabled = false
-            }
-        }); */
     });
 }
 
@@ -67,29 +57,3 @@ chrome.runtime.onMessage.addListener(
         }
     }
 );
-
-/* function modifyDOM() {
-    setInterval(function () {
-        if (document.querySelector("#rc-anchor-container")) {
-            console.log("are_you_there_click running...")
-        }
-        document.querySelector("#rc-anchor-container")?.click()
-        dialogs = document.getElementsByTagName("colab-recaptcha-dialog")
-        if (dialogs) {
-            dialogs[0]?.close()
-        }
-        document.getElementsByClassName("recaptcha-checkbox goog-inline-block recaptcha-checkbox-unchecked rc-anchor-checkbox")?.item("recaptcha-anchor")?.click()
-    }, 5000)
-    console.log('Tab script:');
-    console.log(document.body);
-    return document.body.innerHTML;
-}
-
-//We have permission to access the activeTab, so we can call chrome.tabs.executeScript:
-chrome.tabs.executeScript({
-    code: '(' + modifyDOM + ')();' //argument here is a string but function.toString() returns function's code
-}, (results) => {
-    //Here we have just the innerHTML and not DOM structure
-    console.log('Popup script:')
-    console.log(results[0]);
-}); */

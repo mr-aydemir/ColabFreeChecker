@@ -1,3 +1,6 @@
+import {format_colab_url} from '../../js/helper.js';
+
+
 var listItems = Array.from(document.querySelectorAll(".list-item"));
 var rowSize = listItems[0].offsetHeight; // => container height / number of items
 var container = document.querySelector(".tasks");// Array of elements
@@ -10,7 +13,7 @@ TweenLite.to(container, 0.5, { autoAlpha: 1 });
 var listItems = []
 
 document.querySelector('#push').onclick = function () {
-  url = document.querySelector('#newtask input').value
+  var url = document.querySelector('#newtask input').value
   if (url.length == 0 || !url.includes("colab") || urls.includes(url)) {
     alert("Kindly Enter Task Name!!!!")
   }
@@ -44,7 +47,7 @@ function removeUrl(url) {
   });
 }
 function addurl(url) {
-  url = url.split("#")[0] ?? url
+  url = format_colab_url(url)
   chrome.storage.sync.get("otomation_urls", function (data) {
     urls = []
     if (data && data.otomation_urls && data.otomation_urls.length > 0)
@@ -71,6 +74,8 @@ function changeAllUrls(_urls) {
   }
 
 }
+
+
 
 function appendToList(url) {
   document.querySelector('#tasks').innerHTML += `
