@@ -155,7 +155,7 @@ function set_enable(value) {
             clearInterval(interval)
         }
         //gerekli temizlemeler yapılır
-        activeInterval = []
+        activeIntervals = []
         activated = false
         reset()
     }
