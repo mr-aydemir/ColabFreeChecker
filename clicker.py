@@ -40,6 +40,7 @@ def leave_click():
         print("leave clicking... ",area.left+area.width/2, area.top+area.height/2)
 
 
+
 while True:
     leave_click()
     robo_click()
