@@ -230,11 +230,16 @@ function otomation() {
     });
     otomation_enabled = true
 
-    drive_folder_interval = setInterval(() => {
+    drive_folder_interval = setInterval( async() => {
         // GPU kullanım limiti dolmuşsa sonraki taba geçmesi için eklenti bilgilendirilir
         if (is_there_gpu_allert_message()) {
             sendMessage("NEXT_TAB")
             return
+        }
+        if (document.querySelector("colab-recaptcha-dialog")) {
+            await fetch("http://127.0.0.1:5000/click_robo", {
+                method: 'GET'
+            });
         }
         // yan panel kapatılmışsa açılır, drive vs dosyaların görüntülenmesi için gereklidir.
         if (document.querySelector("body > mwc-dialog > a")?.textContent.includes("Colab Pro")) {
