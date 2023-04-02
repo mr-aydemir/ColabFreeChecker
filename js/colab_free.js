@@ -1,3 +1,5 @@
+import {click_robo} from './helper.js';
+
 const offline_query = ".file-tree-name[title='sample_data']"
 const left_pane_query = "body > div.notebook-vertical.colab-left-pane-open > div.notebook-horizontal > colab-left-pane"
 const ram_message_ok_button_query = "mwc-button"
@@ -172,7 +174,6 @@ function reset() {
     is_on_interaction = false
 }
 
-
 var activeInterval = null
 // durum aktifleştirme pasifleştirme
 function set_enable(value) {
@@ -180,11 +181,7 @@ function set_enable(value) {
         // aktif interval
         activeInterval = setInterval(async function () {
             // Burada mısınız mesajı gelmişse tıklanır
-            if (document.querySelector("colab-recaptcha-dialog")) {
-                await fetch("http://127.0.0.1:5000/click_robo", {
-                    method: 'GET'
-                });
-            }
+            await click_robo()
             // offline kontrolcüsü
             check_offline()
             // 10-20 sn bir etkileşim yapan fonksyon
@@ -236,11 +233,7 @@ function otomation() {
             sendMessage("NEXT_TAB")
             return
         }
-        if (document.querySelector("colab-recaptcha-dialog")) {
-            await fetch("http://127.0.0.1:5000/click_robo", {
-                method: 'GET'
-            });
-        }
+        await click_robo()
         // yan panel kapatılmışsa açılır, drive vs dosyaların görüntülenmesi için gereklidir.
         if (document.querySelector("body > mwc-dialog > a")?.textContent.includes("Colab Pro")) {
             clickRamMessageOK()

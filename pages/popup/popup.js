@@ -1,3 +1,5 @@
+import {click_leave} from '../../js/helper.js';
+
 state_map = {
     "OFFLINE": "Çevrimdışı",
     "ONLINE": "Çevrimiçi",
@@ -77,9 +79,7 @@ function start() {
                 url = last_otomation_url.last_otomation_url
                 if (!url) url = data.otomation_urls[0]
                 chrome.tabs.update(tabs[0].id, { url: url });
-                await fetch("http://127.0.0.1:5000/click_leave", {
-                    method: 'GET'
-                });
+                await click_leave()
                 var enabled = true
                 chrome.tabs.onUpdated.addListener(function doOto(tabId, info) {
                     if (info.status === 'complete' && tabId == tabs[0].id && enabled) {

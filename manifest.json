@@ -39,8 +39,5 @@
     "background": {
         "service_worker": "/js/service_worker.js",
         "type": "module"
-    },
-    "externally_connectable": {
-        "matches": ["*://localhost/*", "file:///*"]
     }
 }
