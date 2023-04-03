@@ -274,12 +274,23 @@
 
         }
     });
+    chrome.runtime.connect({ name: "LOADING" }).postMessage({ enable: true });
     //sendMessage("LOAD_COMPLETED")
-    function sendContentLoaded(name="LOAD_COMPLETED") {
+    function sendContentLoaded(name = "LOAD_COMPLETED") {
+        
         chrome.runtime.connect({ name: name }).postMessage({ enable: true });
-        if (chrome.runtime.lastError) {
+        var listener = chrome.runtime.onConnect.addListener(function (port) {
+            if (port.name == name) {
+                if (chrome.runtime.lastError) {
+                    setTimeout(sendContentLoaded, 1000);
+                    chrome.runtime.onConnect.removeListener(listener);
+                    console.log("last runtime error");
+                }
+            }
+        })
+       /*  if (chrome.runtime.lastError) {
             setTimeout(sendContentLoaded, 1000);
-        }
+        } */
     }
     document.addEventListener("DOMContentLoaded", function () {
         console.log("completed");
