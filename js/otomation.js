@@ -10,39 +10,43 @@ export async function get_otomation_urls() {
 export async function get_last_active_url() {
     return (await chrome.storage.sync.get("last_otomation_url"))?.last_otomation_url
 }
-chrome.runtime.onConnect.addListener(function oto(port) { });
-export async function goNext(tab, url, next = false) {
+var enabled = false
+var tab = undefined
+var current_url=undefined
+var myPortListener = chrome.runtime.onConnect.addListener(function oto(port) {
+    console.log(port);
+    port.onMessage.addListener((message, port) => {
+        if (!tab || !current_url || port.sender.tab.id != tab.id || !enabled) {
+            return
+        }
+        if (port.name == "LOAD_COMPLETED") {
+            toogleActivity(tab.id, true, true)
+            enabled = false
+            chrome.runtime.onConnect.removeListener(myPortListener)
+            return
+        }
+        if (port.name == "LOAD_ERROR") {
+            goNext(tab, current_url)
+            enabled = false
+            chrome.runtime.onConnect.removeListener(myPortListener)
+            return
+        }
+    })
+
+});
+export async function goNext(_tab, url, next = false) {
     console.log("url:", url);
     if (url && next)
         url = await get_next_url(url)
-    if (!url) { url = format_colab_url(tab.url); console.log("tab:", tab); }
-    await navigate_to_URL(tab.id, url)
+    if (!url) { url = format_colab_url(_tab.url); console.log("tab:", _tab); }
+    await navigate_to_URL(_tab.id, url)
 
     console.log(tab);
-    var enabled = true
-    let myPortListener
+    enabled = true
+    tab = _tab
+    current_url = url
 
-    myPortListener = chrome.runtime.onConnect.addListener(function oto(port) {
-        console.log(port);
-        port.onMessage.addListener((message, port) => {
-            if (port.sender.tab.id != tab.id || !enabled) {
-                return
-            }
-            if (port.name == "LOAD_COMPLETED") {
-                toogleActivity(tab.id, true, true)
-                enabled = false
-                chrome.runtime.onConnect.removeListener(myPortListener)
-                return
-            }
-            if (port.name == "LOAD_ERROR") {
-                goNext(tab, url)
-                enabled = false
-                chrome.runtime.onConnect.removeListener(myPortListener)
-                return
-            }
-        })
 
-    });
 }
 
 
