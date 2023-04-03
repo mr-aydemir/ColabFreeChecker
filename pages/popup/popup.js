@@ -49,14 +49,18 @@ function removeUrl_from_otomasyon() {
     });
 }
 
+function send_message_to_service_worker(state, tab) {
+    const data = { type: "FROM_PAGE", state: state, activated: true, tab:tab }
+    chrome.runtime.sendMessage(data);
+}
 function start_process() {
     chrome.tabs.query({ active: true, currentWindow: true }, async function (tabs) {
-        start(tabs[0])
+        send_message_to_service_worker("START", tabs[0])
     });
 }
 function continue_process() {
     chrome.tabs.query({ active: true, currentWindow: true }, async function (tabs) {
-        continue_last(tabs[0])
+        send_message_to_service_worker("CONTINUE", tabs[0])
     });
 }
 

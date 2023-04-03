@@ -274,10 +274,9 @@
 
         }
     });
-    chrome.runtime.connect({ name: "LOADING" }).postMessage({ enable: true });
     //sendMessage("LOAD_COMPLETED")
     function sendContentLoaded(name = "LOAD_COMPLETED") {
-        
+
         chrome.runtime.connect({ name: name }).postMessage({ enable: true });
         var listener = chrome.runtime.onConnect.addListener(function (port) {
             if (port.name == name) {
@@ -288,9 +287,9 @@
                 }
             }
         })
-       /*  if (chrome.runtime.lastError) {
-            setTimeout(sendContentLoaded, 1000);
-        } */
+        /*  if (chrome.runtime.lastError) {
+             setTimeout(sendContentLoaded, 1000);
+         } */
     }
     document.addEventListener("DOMContentLoaded", function () {
         console.log("completed");
