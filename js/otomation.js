@@ -11,7 +11,7 @@ export async function get_last_active_url() {
     return (await chrome.storage.sync.get("last_otomation_url"))?.last_otomation_url
 }
 
-export async function goNext(tab, url, next=false) {
+export async function goNext(tab, url, next = false) {
     console.log("url:", url);
     if (url && next)
         url = await get_next_url(url)
@@ -21,25 +21,28 @@ export async function goNext(tab, url, next=false) {
     console.log(tab);
     var enabled = true
     let myPortListener
-    function oto(port) {
+
+    myPortListener = chrome.runtime.onConnect.addListener(function oto(port) {
         console.log(port);
-        if (port.sender.tab.id != tab.id || !enabled) {
-            return
-        }
-        if (port.name == "LOAD_COMPLETED") {
-            toogleActivity(tab.id, true, true)
-            enabled = false
-            chrome.runtime.onConnect.removeListener(myPortListener)
-            return
-        }
-        if (port.name == "LOAD_ERROR") {
-            goNext(tab, url)
-            enabled = false
-            chrome.runtime.onConnect.removeListener(myPortListener)
-            return
-        }
-    }
-    myPortListener=chrome.runtime.onConnect.addListener(oto);
+        port.onMessage.addListener((message, port) => {
+            if (port.sender.tab.id != tab.id || !enabled) {
+                return
+            }
+            if (port.name == "LOAD_COMPLETED") {
+                toogleActivity(tab.id, true, true)
+                enabled = false
+                chrome.runtime.onConnect.removeListener(myPortListener)
+                return
+            }
+            if (port.name == "LOAD_ERROR") {
+                goNext(tab, url)
+                enabled = false
+                chrome.runtime.onConnect.removeListener(myPortListener)
+                return
+            }
+        })
+
+    });
 }
 
 
