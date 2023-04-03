@@ -1,5 +1,5 @@
 import { format_colab_url } from "../../js/helper.js";
-import { add_url, canAdd, canStart, remove_url, toogleActivity } from "../../js/otomation.js";
+import { add_url, canAdd, canContinue, canStart, remove_url, toogleActivity } from "../../js/otomation.js";
 const state_map = {
     "OFFLINE": "Çevrimdışı",
     "ONLINE": "Çevrimiçi",
@@ -107,6 +107,7 @@ window.onload = function () {
         // colabtaysa sayfadan durum ister
         sendGetStateRequest(tabs)
         document.getElementById('start').hidden = !(await canStart(url))
+        document.getElementById('continue').hidden = !(await canContinue(url))
         hide_add_url((await canAdd(url)))
     });
 }
