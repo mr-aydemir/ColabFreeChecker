@@ -12,26 +12,24 @@ export async function get_last_active_url() {
 }
 var enabled = false
 var tab = undefined
-var current_url=undefined
+var current_url = undefined
 var myPortListener = chrome.runtime.onConnect.addListener(function oto(port) {
     console.log(port);
-    port.onMessage.addListener((message, port) => {
-        if (!tab || !current_url || port.sender.tab.id != tab.id || !enabled) {
-            return
-        }
-        if (port.name == "LOAD_COMPLETED") {
-            toogleActivity(tab.id, true, true)
-            enabled = false
-            chrome.runtime.onConnect.removeListener(myPortListener)
-            return
-        }
-        if (port.name == "LOAD_ERROR") {
-            goNext(tab, current_url)
-            enabled = false
-            chrome.runtime.onConnect.removeListener(myPortListener)
-            return
-        }
-    })
+    if (!tab || !current_url || port.sender.tab.id != tab.id || !enabled) {
+        return
+    }
+    if (port.name == "LOAD_COMPLETED") {
+        toogleActivity(tab.id, true, true)
+        enabled = false
+        chrome.runtime.onConnect.removeListener(myPortListener)
+        return
+    }
+    if (port.name == "LOAD_ERROR") {
+        goNext(tab, current_url)
+        enabled = false
+        chrome.runtime.onConnect.removeListener(myPortListener)
+        return
+    }
 
 });
 export async function goNext(_tab, url, next = false) {
