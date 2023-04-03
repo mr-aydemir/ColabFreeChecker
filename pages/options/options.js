@@ -1,9 +1,5 @@
-//import((chrome.runtime.getURL || chrome.extension.getURL)('/js/helper.js'));
-function format_colab_url(url) {
-  if (url.includes("#"))
-      url = url.split("#")[0]
-  return url
-}
+import { format_colab_url } from "../../js/helper.js";
+
 
 var listItems = Array.from(document.querySelectorAll(".list-item"));
 var rowSize = listItems[0].offsetHeight; // => container height / number of items

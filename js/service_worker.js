@@ -1,16 +1,4 @@
-/* import((chrome.runtime.getURL || chrome.extension.getURL)('/js/helper.js')); */
-//importScripts('/js/helper.js')
-async function click_leave() {
-    await fetch("http://127.0.0.1:5000/click_leave", {
-        method: 'GET'
-    });
-}
-
-function format_colab_url(url) {
-    if (url.includes("#"))
-        url = url.split("#")[0]
-    return url
-}
+import { click_leave, format_colab_url, test123 } from "./helper.js";
 
 function get_next_url(urls, url) {
     const t_index = urls.indexOf(url);
