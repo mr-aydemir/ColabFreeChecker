@@ -31,7 +31,6 @@
                 "https://colab.research.google.com/*"
             ],
             "js": [
-                "/js/helper.js",
                 "/js/colab_free.js"
             ],
             "run_at": "document_end"
@@ -40,5 +39,15 @@
     "background": {
         "service_worker": "/js/service_worker.js",
         "type": "module"
-    }
+    },
+    "web_accessible_resources": [
+        {
+            "matches": [
+                "https://colab.research.google.com/*"
+            ],
+            "resources": [
+                "/js/helper.js"
+            ]
+        }
+    ],
 }

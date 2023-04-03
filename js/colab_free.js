@@ -1,3 +1,5 @@
+import { click_robo,format_colab_url } from './helper.js';
+
 const offline_query = ".file-tree-name[title='sample_data']"
 const left_pane_query = "body > div.notebook-vertical.colab-left-pane-open > div.notebook-horizontal > colab-left-pane"
 const ram_message_ok_button_query = "mwc-button"
