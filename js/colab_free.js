@@ -280,7 +280,6 @@
             console.log(response);
             if (chrome.runtime.lastError) {
                 setTimeout(sendContentLoaded, 1000);
-                console.log("last runtime error");
             }
         });
     }

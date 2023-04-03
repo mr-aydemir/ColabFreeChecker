@@ -31,17 +31,17 @@ export async function goNext(tab, url, next = false) {
             toogleActivity(tab.id, true, true)
             enabled = false
             chrome.runtime.onMessage.removeListener(myPortListener)
-            sendResponse({status: 'ok'});
+            sendResponse({status: request.name});
             return
         }
         if (request.name == "LOAD_ERROR") {
             goNext(tab, url)
             enabled = false
             chrome.runtime.onMessage.removeListener(myPortListener)
-            sendResponse({status: 'ok'});
+            sendResponse({status: request.name});
             return
         }
-        sendResponse({status: 'ok'});
+        sendResponse({status: request.name});
     });
 
 
