@@ -1,5 +1,5 @@
 import { format_colab_url } from "../../js/helper.js";
-import { add_url, canAdd, canStart, continue_last, remove_url, start, toogleActivity } from "../../js/otomation.js";
+import { add_url, canAdd, canStart, remove_url, toogleActivity } from "../../js/otomation.js";
 const state_map = {
     "OFFLINE": "Çevrimdışı",
     "ONLINE": "Çevrimiçi",
@@ -50,7 +50,7 @@ function removeUrl_from_otomasyon() {
 }
 
 function send_message_to_service_worker(state, tab) {
-    const data = { type: "FROM_PAGE", state: state, activated: true, tab:tab }
+    const data = { type: "FROM_PAGE", state: state, activated: true, tab: tab }
     chrome.runtime.sendMessage(data);
 }
 function start_process() {
