@@ -284,7 +284,7 @@
             } */
         });
     }
-    sendContentLoaded()
+    sendContentLoaded("JS_LOADED")
     document.addEventListener("DOMContentLoaded", function () {
         console.log("completed");
         var int1 = setInterval(function () {
