@@ -76,7 +76,7 @@ function start() {
     chrome.tabs.query({ active: true, currentWindow: true },  function (tabs) {
         chrome.storage.sync.get("last_otomation_url", function (last_otomation_url) {
             chrome.storage.sync.get("otomation_urls", async function (data) {
-                url = last_otomation_url.last_otomation_url
+                var url = last_otomation_url.last_otomation_url
                 if (!url) url = data.otomation_urls[0]
                 chrome.tabs.update(tabs[0].id, { url: url });
                 await click_leave()
