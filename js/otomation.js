@@ -11,14 +11,17 @@ export async function get_last_active_url() {
     return (await chrome.storage.sync.get("last_otomation_url"))?.last_otomation_url
 }
 
-export async function goNext(tab, url) {
-    if (!url)
-        url = await get_next_url(tab.url)
-    if (!url) return
+export async function goNext(tab, url, next=false) {
+    console.log("url:", url);
+    if (url && next)
+        url = await get_next_url(url)
+    if (!url) { url = format_colab_url(tab.url); console.log("tab:", tab); }
     await navigate_to_URL(tab.id, url)
 
+    console.log(tab);
     var enabled = true
-    chrome.runtime.onConnect.addListener(function doOto(port) {
+    let myPortListener
+    function oto(port) {
         console.log(port);
         if (port.sender.tab.id != tab.id || !enabled) {
             return
@@ -26,16 +29,17 @@ export async function goNext(tab, url) {
         if (port.name == "LOAD_COMPLETED") {
             toogleActivity(tab.id, true, true)
             enabled = false
-            chrome.runtime.onConnect.removeListener(doOto)
+            chrome.runtime.onConnect.removeListener(myPortListener)
             return
         }
         if (port.name == "LOAD_ERROR") {
             goNext(tab, url)
             enabled = false
-            chrome.runtime.onConnect.removeListener(doOto)
+            chrome.runtime.onConnect.removeListener(myPortListener)
             return
         }
-    });
+    }
+    myPortListener=chrome.runtime.onConnect.addListener(oto);
 }
 
 
@@ -58,7 +62,11 @@ export async function get_next_url(url) {
     const next_tab = urls[t_next_index]
     return next_tab
 }
-export async function canStart() {
+export async function canStart(url) {
+    const urls = await get_otomation_urls()
+    return url.includes("colab") && urls.includes(url)
+}
+export async function canContinue() {
     const urls = await get_otomation_urls()
     const last = await get_last_active_url()
     if (last && urls && urls.includes(last)) {
@@ -70,10 +78,18 @@ export async function canAdd(url) {
     const urls = await get_otomation_urls()
     return url && urls.includes(url)
 }
-export async function start(tab) {
+export async function continue_last(tab) {
     const last_otomation_url = await get_last_active_url()
     goNext(tab, last_otomation_url)
 }
+export async function continue_last_next(tab) {
+    const last_otomation_url = await get_last_active_url()
+    goNext(tab, last_otomation_url, true)
+}
+export function start(tab) {
+    goNext(tab)
+}
+
 
 export async function add_url(url) {
     url = format_colab_url(url)

@@ -1,4 +1,5 @@
-import { add_url, canAdd, canStart, remove_url, start, toogleActivity } from "../../js/otomation.js";
+import { format_colab_url } from "../../js/helper.js";
+import { add_url, canAdd, canStart, continue_last, remove_url, start, toogleActivity } from "../../js/otomation.js";
 const state_map = {
     "OFFLINE": "Çevrimdışı",
     "ONLINE": "Çevrimiçi",
@@ -53,9 +54,15 @@ function start_process() {
         start(tabs[0])
     });
 }
+function continue_process() {
+    chrome.tabs.query({ active: true, currentWindow: true }, async function (tabs) {
+        continue_last(tabs[0])
+    });
+}
 
 
 document.getElementById('start').addEventListener('click', start_process);
+document.getElementById('continue').addEventListener('click', continue_process);
 document.getElementById('add_url').addEventListener('click', addUrl_to_otomasyon);
 document.getElementById('remove_url').addEventListener('click', removeUrl_from_otomasyon);
 
@@ -86,7 +93,7 @@ window.onload = function () {
 
     chrome.tabs.query({ active: true, currentWindow: true }, async function (tabs) {
         // colab sitesinde değilse
-        var url = tabs[0].url.split("#")[0] ?? tabs[0].url
+        var url = format_colab_url(tabs[0].url)
         if (!tabs[0].url.includes("colab")) {
             document.getElementById('state').innerHTML = state_map["WRONG_WEBSITE"]
             document.getElementById('toggle-input').disabled = true
@@ -95,7 +102,7 @@ window.onload = function () {
         }
         // colabtaysa sayfadan durum ister
         sendGetStateRequest(tabs)
-        document.getElementById('start').hidden = !(await canStart())
+        document.getElementById('start').hidden = !(await canStart(url))
         hide_add_url((await canAdd(url)))
     });
 }
