@@ -33,7 +33,8 @@
             "js": [
                 "/js/colab_free.js"
             ],
-            "run_at": "document_end"
+            "run_at": "document_end",
+            "type": "module"
         }
     ],
     "background": {
@@ -49,5 +50,5 @@
                 "/js/helper.js"
             ]
         }
-    ],
+    ]
 }

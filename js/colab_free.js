@@ -1,4 +1,19 @@
-import { click_robo,format_colab_url } from './helper.js';
+/* import { click_robo, format_colab_url } from './helper.js'
+ */
+
+
+//helper=import((chrome.runtime.getURL || chrome.extension.getURL)('/js/helper.js'));
+
+async function click_robo() {
+    await fetch("http://127.0.0.1:5000/click_robo", {
+        method: 'GET'
+    });
+}
+function format_colab_url(url) {
+    if (url.includes("#"))
+        url = url.split("#")[0]
+    return url
+}
 
 const offline_query = ".file-tree-name[title='sample_data']"
 const left_pane_query = "body > div.notebook-vertical.colab-left-pane-open > div.notebook-horizontal > colab-left-pane"

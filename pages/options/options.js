@@ -1,5 +1,9 @@
-import {format_colab_url} from '../../js/helper.js';
-
+//import((chrome.runtime.getURL || chrome.extension.getURL)('/js/helper.js'));
+function format_colab_url(url) {
+  if (url.includes("#"))
+      url = url.split("#")[0]
+  return url
+}
 
 var listItems = Array.from(document.querySelectorAll(".list-item"));
 var rowSize = listItems[0].offsetHeight; // => container height / number of items
@@ -93,9 +97,9 @@ function appendToList(url) {
   var current_tasks = document.querySelectorAll(".delete");
   for (var i = 0; i < current_tasks.length; i++) {
     current_tasks[i].onclick = function () {
-      console.log(this.parentNode.querySelector(".url").textContent)
-      removeUrl(this.parentNode.querySelector(".url").textContent)
-      this.parentNode.remove();
+      console.log(this.parentNode.parentNode.querySelector(".url").textContent)
+      removeUrl(this.parentNode.parentNode.querySelector(".url").textContent)
+      this.parentNode.parentNode.remove();
       onListChanged();
     }
   }
