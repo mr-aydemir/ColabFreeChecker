@@ -150,14 +150,14 @@
             // aktif interval
             const in1 = setInterval(check_offline, 1000)
             const in2 = setInterval(connect_click, 30 * 1000)
-            activeIntervals += [in1, in2]
+            activeIntervals = [in1, in2]
             activated = true
         }
         else {
             // interval imha edilir
-            for (interval in activeIntervals) {
-                clearInterval(interval)
-            }
+            activeIntervals.forEach(function (interval) {
+                clearInterval(interval); // Zamanlayıcıyı iptal et
+            });
             //gerekli temizlemeler yapılır
             activeIntervals = []
             activated = false
@@ -274,16 +274,26 @@
 
         }
     });
-    sendMessage("LOAD_COMPLETED")
+    //sendMessage("LOAD_COMPLETED")
 
-    window.addEventListener("load", function (ev) {
-        this.setTimeout(function () {
-            if (document.querySelector(".colab-large-icon")) {
-                sendMessage("LOAD_COMPLETED")
+    document.addEventListener("DOMContentLoaded", function () {
+        console.log("completed");
+        var int1 = setInterval(function () {
+            console.log("test");
+            if (document.querySelector("#header-logo > a > iron-icon")) {
+                console.log("LOAD_COMPLETED");
+                chrome.runtime.connect({ name: "LOAD_COMPLETED" }).postMessage({ enable: true });
+                clearInterval(int1)
                 return
             }
-            sendMessage("LOAD_ERROR")
-        }, 2000)
 
-    })
+            if (document.querySelector(".message-area")) {
+                return
+            }
+            console.log("LOAD_ERROR");
+            chrome.runtime.connect({ name: "LOAD_ERROR" }).postMessage({ enable: true });
+            this.clearInterval(int1)
+        }, 500)
+
+    });
 })();

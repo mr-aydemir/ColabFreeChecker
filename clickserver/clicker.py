@@ -22,19 +22,19 @@ screen_height = win.winfo_screenheight()
 
 
 def robo_click():
-    robo=pg.locateOnScreen('white_robo.png', grayscale=True, confidence=0.5)
+    robo=pg.locateOnScreen('./white_robo.png', grayscale=True, confidence=0.5)
     #print("Screen resolution", screen_width, screen_height)
     if robo is not None:
         pg.click(robo.left+20, robo.top+15)
         print("robo clicking...", robo.left+robo.width/2, robo.top+robo.height/2)
     else:
-        robo=pg.locateOnScreen('reload.png', confidence=0.5)
+        robo=pg.locateOnScreen('./reload.png', confidence=0.5)
         if robo is not None:
             pg.click(robo.left+robo.width/2, robo.top+robo.height/2)
             print("reload clicking...", robo.left+robo.width/2, robo.top+robo.height/2)
 
 def leave_click():
-    area=pg.locateOnScreen('leave.png', grayscale=True, confidence=0.7)
+    area=pg.locateOnScreen('./leave.png', grayscale=True, confidence=0.7)
     if area is not None:
         pg.click(area.left+area.width/2, area.top+area.height/2)
         print("leave clicking... ",area.left+area.width/2, area.top+area.height/2)

@@ -33,7 +33,7 @@
             "js": [
                 "/js/colab_free.js"
             ],
-            "run_at": "document_end",
+            "run_at": "document_start",
             "type": "module"
         }
     ],

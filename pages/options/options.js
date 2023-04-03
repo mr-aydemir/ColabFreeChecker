@@ -1,4 +1,5 @@
 import { format_colab_url } from "../../js/helper.js";
+import { add_url, get_otomation_urls, remove_url, setAll } from "../../js/otomation.js";
 
 
 var listItems = Array.from(document.querySelectorAll(".list-item"));
@@ -33,41 +34,15 @@ function onListChanged() {
   sortables.forEach((sortable, index) => sortable.setIndex(index));
 }
 
-function removeUrl(url) {
-  chrome.storage.sync.get("otomation_urls", function (data) {
-    if (!data || !data.otomation_urls || data.otomation_urls.length == 0) return
-    urls = data.otomation_urls
-    if (!urls.includes(url)) return
-    urls = urls.filter(function (item) {
-      return item !== url
-    })
-    chrome.storage.sync.set({
-      "otomation_urls": urls
-    });
-  });
-}
-function addurl(url) {
-  url = format_colab_url(url)
-  chrome.storage.sync.get("otomation_urls", function (data) {
-    urls = []
-    if (data && data.otomation_urls && data.otomation_urls.length > 0)
-      urls = data.otomation_urls
-    if (urls.includes(url)) return
 
-    urls.push(url)
-    console.log(urls)
-    chrome.storage.sync.set({
-      "otomation_urls": urls
-    });
-    appendToList(url)
-  });
+async function addurl(url) {
+  const ok = await add_url(url)
+  if (ok) appendToList(format_colab_url(url))
 }
 
 function changeAllUrls(_urls) {
   urls = _urls
-  chrome.storage.sync.set({
-    "otomation_urls": urls
-  });
+  setAll(urls)
   document.querySelector('#tasks').innerHTML = ""
   for (const url of urls) {
     appendToList(url)
@@ -92,9 +67,9 @@ function appendToList(url) {
   onListChanged();
   var current_tasks = document.querySelectorAll(".delete");
   for (var i = 0; i < current_tasks.length; i++) {
-    current_tasks[i].onclick = function () {
+    current_tasks[i].onclick = async function () {
       console.log(this.parentNode.parentNode.querySelector(".url").textContent)
-      removeUrl(this.parentNode.parentNode.querySelector(".url").textContent)
+      await remove_url(this.parentNode.parentNode.querySelector(".url").textContent)
       this.parentNode.parentNode.remove();
       onListChanged();
     }
@@ -114,26 +89,26 @@ function createListWidget(urls) {
   }
 }
 
-document.querySelector('#export').onclick = function () {
-  chrome.storage.sync.get("otomation_urls", function (data) {
-    var saveData = (function () {
-      var a = document.createElement("a");
-      document.body.appendChild(a);
-      a.style = "display: none";
-      return function (data, fileName) {
-        var json = JSON.stringify(data),
-          blob = new Blob([json], { type: "octet/stream" }),
-          url = window.URL.createObjectURL(blob);
-        a.href = url;
-        a.download = fileName;
-        a.click();
-        window.URL.revokeObjectURL(url);
-      };
-    }());
+document.querySelector('#export').onclick = async function () {
 
-    fileName = "backup_colab_free_checker.json";
-    saveData(data, fileName);
-  });
+  var data = { "otomation_urls": await get_otomation_urls() }
+  var saveData = (function () {
+    var a = document.createElement("a");
+    document.body.appendChild(a);
+    a.style = "display: none";
+    return function (data, fileName) {
+      var json = JSON.stringify(data),
+        blob = new Blob([json], { type: "octet/stream" }),
+        url = window.URL.createObjectURL(blob);
+      a.href = url;
+      a.download = fileName;
+      a.click();
+      window.URL.revokeObjectURL(url);
+    };
+  }());
+
+  var fileName = "backup_colab_free_checker.json";
+  saveData(data, fileName);
 }
 document.querySelector('#import').onclick = async function () {
   let fileHandle;
@@ -155,21 +130,16 @@ document.querySelector('#import').onclick = async function () {
   console.log(fileHandle)
   console.log(file)
   console.log(contents)
-  data = JSON.parse(contents)
+  var data = JSON.parse(contents)
   console.log(data)
   changeAllUrls(data.otomation_urls)
 }
 
 
 
-function restore_options() {
-  // Use default value color = 'red' and likesColor = true.
-  chrome.storage.sync.get("otomation_urls", function (data) {
-
-    urls = data?.otomation_urls
-    console.log(data)
-    createListWidget(urls)
-  });
+async function restore_options() {
+  var urls = await get_otomation_urls()
+  createListWidget(urls)
 }
 document.addEventListener('DOMContentLoaded', restore_options);
 
@@ -192,12 +162,9 @@ function changeIndex(item, to) {
 
 }
 
-function dragend() {
+async function dragend() {
   urls = sortables.map((value, index, array) => value.element.querySelector(".url").textContent)
-
-  chrome.storage.sync.set({
-    "otomation_urls": urls
-  });
+  await setAll(urls)
   console.log(urls);
 }
 function Sortable(element, index) {

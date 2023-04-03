@@ -1,5 +1,4 @@
-import { click_leave, format_colab_url } from "/js/helper.js";
-
+import { add_url, canAdd, canStart, remove_url, start, toogleActivity } from "../../js/otomation.js";
 const state_map = {
     "OFFLINE": "Çevrimdışı",
     "ONLINE": "Çevrimiçi",
@@ -26,78 +25,37 @@ function sendGetStateRequest(tabs) {
 function on_toogle_click(cb) {
     const enable = this.checked
     chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-        port = chrome.tabs.connect(tabs[0].id, { name: "toogleActivity" });
-        port.postMessage({ enable: enable });
+        toogleActivity(tabs[0].id, enable)
     });
 }
+function hide_add_url(value) {
+    document.getElementById('add_url').hidden = value
+    document.getElementById('remove_url').hidden = !value
+}
+
+
 function addUrl_to_otomasyon() {
-
-    chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-        var url = format_colab_url(tabs[0].url)
-        chrome.storage.sync.get("otomation_urls", function (data) {
-            var urls = []
-            if (data && data.otomation_urls && data.otomation_urls.length > 0)
-                urls = data.otomation_urls
-            if (urls.includes(url)) return
-
-            urls.push(url)
-            console.log(urls)
-            chrome.storage.sync.set({
-                "otomation_urls": urls
-            });
-            document.getElementById('add_url').hidden = true
-            document.getElementById('remove_url').hidden = false
-        });
+    chrome.tabs.query({ active: true, currentWindow: true }, async function (tabs) {
+        const ok = await add_url(tabs[0].url)
+        hide_add_url(ok)
     });
-
 }
 
 function removeUrl_from_otomasyon() {
-    chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-        var url = format_colab_url(tabs[0].url)
-        chrome.storage.sync.get("otomation_urls", function (data) {
-            if (!data || !data.otomation_urls || data.otomation_urls.length == 0) return
-            var urls = data.otomation_urls
-            if (!urls.includes(url)) return
-            urls = urls.filter(function (item) {
-                return item !== url
-            })
-            chrome.storage.sync.set({
-                "otomation_urls": urls
-            });
-            document.getElementById('add_url').hidden = false
-            document.getElementById('remove_url').hidden = true
-        });
+    chrome.tabs.query({ active: true, currentWindow: true }, async function (tabs) {
+        const ok = await remove_url(tabs[0].url)
+        hide_add_url(!ok)
     });
-
 }
 
-function start() {
-    chrome.tabs.query({ active: true, currentWindow: true },  function (tabs) {
-        chrome.storage.sync.get("last_otomation_url", function (last_otomation_url) {
-            chrome.storage.sync.get("otomation_urls", async function (data) {
-                var url = last_otomation_url.last_otomation_url
-                if (!url) url = data.otomation_urls[0]
-                chrome.tabs.update(tabs[0].id, { url: url });
-                await click_leave()
-                var enabled = true
-                chrome.tabs.onUpdated.addListener(function doOto(tabId, info) {
-                    if (info.status === 'complete' && tabId == tabs[0].id && enabled) {
-                        console.log("otomasyon başladı");
-                        setText({ type: "FROM_PAGE", state: "LOADING", offline_count: 0, activated: true })
-                        port = chrome.tabs.connect(tabs[0].id, { name: "toogleActivity" });
-                        port.postMessage({ enable: true, otomation: true });
-                        chrome.tabs.onUpdated.removeListener(doOto);
-                        enabled = false
-                    }
-                });
-            });
-        });
+function start_process() {
+    chrome.tabs.query({ active: true, currentWindow: true }, async function (tabs) {
+        start(tabs[0])
     });
 }
 
 
-document.getElementById('start').addEventListener('click', start);
+document.getElementById('start').addEventListener('click', start_process);
 document.getElementById('add_url').addEventListener('click', addUrl_to_otomasyon);
 document.getElementById('remove_url').addEventListener('click', removeUrl_from_otomasyon);
 
@@ -126,7 +84,7 @@ chrome.runtime.onMessage.addListener(
 
 window.onload = function () {
 
-    chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+    chrome.tabs.query({ active: true, currentWindow: true }, async function (tabs) {
         // colab sitesinde değilse
         var url = tabs[0].url.split("#")[0] ?? tabs[0].url
         if (!tabs[0].url.includes("colab")) {
@@ -137,21 +95,7 @@ window.onload = function () {
         }
         // colabtaysa sayfadan durum ister
         sendGetStateRequest(tabs)
-        chrome.storage.sync.get("otomation_urls", function (data) {
-
-            console.log(data)
-            if (!data || !data.otomation_urls || data.otomation_urls.length == 0) return
-            var urls = data.otomation_urls
-            console.log(urls)
-            chrome.storage.sync.get("last_otomation_url", function (last_otomation_url) {
-                if (!last_otomation_url) return
-                if (url && urls.includes(last_otomation_url))
-                    document.getElementById('continue').hidden = false
-            });
-            if (url && urls.includes(url)) {
-                document.getElementById('add_url').hidden = true
-                document.getElementById('remove_url').hidden = false
-            }
-        });
+        document.getElementById('start').hidden = !(await canStart())
+        hide_add_url((await canAdd(url)))
     });
 }

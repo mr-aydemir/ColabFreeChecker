@@ -13,8 +13,3 @@ export function format_colab_url(url) {
         url = url.split("#")[0]
     return url
 }
-
-export function test123() {
-    
-console.log("helper run...");
-}
