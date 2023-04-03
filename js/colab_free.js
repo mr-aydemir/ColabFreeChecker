@@ -278,10 +278,10 @@
     function sendContentLoaded(name = "LOAD_COMPLETED") {
         chrome.runtime.sendMessage({ name: name }, (response) => {
             console.log(response);
-            /* if (chrome.runtime.lastError) {
+            if (chrome.runtime.lastError) {
                 setTimeout(sendContentLoaded, 1000);
                 console.log("last runtime error");
-            } */
+            }
         });
     }
     sendContentLoaded("JS_LOADED")
