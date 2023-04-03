@@ -275,14 +275,18 @@
         }
     });
     //sendMessage("LOAD_COMPLETED")
-
+    function sendContentLoaded(name="LOAD_COMPLETED") {
+        chrome.runtime.connect({ name: name }).postMessage({ enable: true });
+        if (chrome.runtime.lastError) {
+            setTimeout(sendContentLoaded, 1000);
+        }
+    }
     document.addEventListener("DOMContentLoaded", function () {
         console.log("completed");
         var int1 = setInterval(function () {
-            console.log("test");
             if (document.querySelector("#header-logo > a > iron-icon")) {
                 console.log("LOAD_COMPLETED");
-                chrome.runtime.connect({ name: "LOAD_COMPLETED" }).postMessage({ enable: true });
+                sendContentLoaded()
                 clearInterval(int1)
                 return
             }
@@ -291,7 +295,7 @@
                 return
             }
             console.log("LOAD_ERROR");
-            chrome.runtime.connect({ name: "LOAD_ERROR" }).postMessage({ enable: true });
+            sendContentLoaded("LOAD_ERROR")
             this.clearInterval(int1)
         }, 500)
 
