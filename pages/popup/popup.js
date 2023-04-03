@@ -1,6 +1,6 @@
 import {click_leave,format_colab_url} from '../../js/helper.js';
 
-state_map = {
+const state_map = {
     "OFFLINE": "Çevrimdışı",
     "ONLINE": "Çevrimiçi",
     "LOADING": "Yükleniyor...",
