@@ -10,39 +10,39 @@ export async function get_otomation_urls() {
 export async function get_last_active_url() {
     return (await chrome.storage.sync.get("last_otomation_url"))?.last_otomation_url
 }
-var enabled = false
-var tab = undefined
-var current_url = undefined
-var myPortListener = chrome.runtime.onConnect.addListener(function oto(port) {
-    console.log(port, tab, current_url);
-    if (!tab || !current_url || port.sender.tab.id != tab.id || !enabled) {
-        return
-    }
-    if (port.name == "LOAD_COMPLETED") {
-        toogleActivity(tab.id, true, true)
-        enabled = false
-        chrome.runtime.onConnect.removeListener(myPortListener)
-        return
-    }
-    if (port.name == "LOAD_ERROR") {
-        goNext(tab, current_url)
-        enabled = false
-        chrome.runtime.onConnect.removeListener(myPortListener)
-        return
-    }
 
-});
-export async function goNext(_tab, url, next = false) {
+
+export async function goNext(tab, url, next = false) {
     console.log("url:", url);
     if (url && next)
         url = await get_next_url(url)
-    if (!url) { url = format_colab_url(_tab.url); console.log("tab:", _tab); }
-    await navigate_to_URL(_tab.id, url)
+    if (!url) { url = format_colab_url(tab.url); console.log("tab:", tab); }
+    await navigate_to_URL(tab.id, url)
 
     console.log(tab);
-    enabled = true
-    tab = _tab
-    current_url = url
+    var enabled = true
+    var myPortListener = chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
+        console.log(sender);
+        if (!tab || !url || sender.tab.id != tab.id || !enabled) {
+            sendResponse({status: 'ok'});
+            return
+        }
+        if (request.name == "LOAD_COMPLETED") {
+            toogleActivity(tab.id, true, true)
+            enabled = false
+            chrome.runtime.onMessage.removeListener(myPortListener)
+            sendResponse({status: 'ok'});
+            return
+        }
+        if (request.name == "LOAD_ERROR") {
+            goNext(tab, url)
+            enabled = false
+            chrome.runtime.onMessage.removeListener(myPortListener)
+            sendResponse({status: 'ok'});
+            return
+        }
+        sendResponse({status: 'ok'});
+    });
 
 
 }

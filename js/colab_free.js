@@ -276,21 +276,15 @@
     });
     //sendMessage("LOAD_COMPLETED")
     function sendContentLoaded(name = "LOAD_COMPLETED") {
-
-        chrome.runtime.connect({ name: name }).postMessage({ enable: true });
-        var listener = chrome.runtime.onConnect.addListener(function (port) {
-            if (port.name == name) {
-                if (chrome.runtime.lastError) {
-                    setTimeout(sendContentLoaded, 1000);
-                    chrome.runtime.onConnect.removeListener(listener);
-                    console.log("last runtime error");
-                }
-            }
-        })
-        /*  if (chrome.runtime.lastError) {
-             setTimeout(sendContentLoaded, 1000);
-         } */
+        chrome.runtime.sendMessage({ name: name }, (response) => {
+            console.log(response);
+            /* if (chrome.runtime.lastError) {
+                setTimeout(sendContentLoaded, 1000);
+                console.log("last runtime error");
+            } */
+        });
     }
+    sendContentLoaded()
     document.addEventListener("DOMContentLoaded", function () {
         console.log("completed");
         var int1 = setInterval(function () {
@@ -307,7 +301,7 @@
             console.log("LOAD_ERROR");
             sendContentLoaded("LOAD_ERROR")
             this.clearInterval(int1)
-        }, 500)
+        }, 100)
 
     });
 })();
