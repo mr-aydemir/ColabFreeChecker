@@ -148,6 +148,9 @@
     function set_enable(value) {
         if (value) {
             // aktif interval
+            activeIntervals.forEach(function (interval) {
+                clearInterval(interval); // Zamanlayıcıyı iptal et
+            });
             const in1 = setInterval(check_offline, 1000)
             const in2 = setInterval(connect_click, 30 * 1000)
             activeIntervals = [in1, in2]
@@ -181,7 +184,7 @@
             "last_otomation_url": helper.format_colab_url(document.URL)
         });
         otomation_enabled = true
-
+        clearInterval(drive_folder_interval)
         drive_folder_interval = setInterval(async () => {
             // GPU kullanım limiti dolmuşsa sonraki taba geçmesi için eklenti bilgilendirilir
             if (is_there_gpu_allert_message()) {

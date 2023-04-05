@@ -45,7 +45,7 @@ def click_leave():
 
 @app.route('/click_robo')
 def click_robo():
-    return click(white_robo, grayscale=True, confidence=0.5, cx=0.1)
+    return click(white_robo, grayscale=True, confidence=0.7, cx=0.5)
 
 
 @app.route('/click_reload')
