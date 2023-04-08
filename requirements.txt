@@ -1,4 +1,9 @@
 pyautogui
 numpy
 opencv-python
-tkinter
+tk
+flask
+Pillow
+#linux:
+#sudo apt-get install python3-tk python3-dev
+#sudo apt-get install scrot
