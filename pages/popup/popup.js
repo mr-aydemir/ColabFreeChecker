@@ -50,7 +50,7 @@ function removeUrl_from_otomasyon() {
 }
 
 function send_message_to_service_worker(state, tab) {
-    const data = { type: "FROM_PAGE", state: state, activated: true, tab: tab }
+    const data = { type: "FROM_POPUP", state: state, activated: true, tab: tab }
     chrome.runtime.sendMessage(data);
 }
 function start_process() {

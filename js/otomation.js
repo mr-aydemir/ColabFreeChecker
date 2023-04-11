@@ -23,25 +23,25 @@ export async function goNext(tab, url, next = false) {
     var enabled = true
     var myPortListener = chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
         console.log(sender);
-        if (!tab || !url || sender.tab.id != tab.id || !enabled) {
-            sendResponse({status: 'ok'});
+        if (!tab || !url || !sender || sender.tab.id != tab.id || !enabled) {
+            //sendResponse({ status: 'ok' });
             return
         }
         if (request.name == "LOAD_COMPLETED") {
             toogleActivity(tab.id, true, true)
             enabled = false
             chrome.runtime.onMessage.removeListener(myPortListener)
-            sendResponse({status: request.name});
+            sendResponse({ status: request.name });
             return
         }
         if (request.name == "LOAD_ERROR") {
             goNext(tab, url)
             enabled = false
             chrome.runtime.onMessage.removeListener(myPortListener)
-            sendResponse({status: request.name});
+            sendResponse({ status: request.name });
             return
         }
-        sendResponse({status: request.name});
+        sendResponse({ status: request.name });
     });
 
 
