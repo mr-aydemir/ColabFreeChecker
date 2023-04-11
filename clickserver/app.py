@@ -18,17 +18,20 @@ reload_png = cv2.imread(get_path('reload.png'))
 
 def click(img, grayscale=True, confidence=0.7, cx=0.5, cy=0.5):
     # should be: 0<=cx<=1 and  0<=cy<=1
-    now = datetime.datetime.now()
-    while True:
-        area = pyautogui.locateOnScreen(
-            img, grayscale=grayscale, confidence=confidence)
-        if area is not None:
-            x, y = area.left+area.width*cx, area.top+area.height*cy
-            pyautogui.click(x, y)
-            return 'Clicked '+str(x) + ", " + str(y)
-        if datetime.datetime.now().second-now.second > 5:
-            return "click wait end."
-        time.sleep(0.5)
+    try:
+        now = datetime.datetime.now()
+        while True:
+            area = pyautogui.locateOnScreen(
+                img, grayscale=grayscale, confidence=confidence)
+            if area is not None:
+                x, y = area.left+area.width*cx, area.top+area.height*cy
+                pyautogui.click(x, y)
+                return 'Clicked '+str(x) + ", " + str(y)
+            if datetime.datetime.now().second-now.second > 5:
+                return "click wait end."
+            time.sleep(0.5)
+    except Exception as e:
+        return str(e)
 
 
 app = Flask(__name__)
