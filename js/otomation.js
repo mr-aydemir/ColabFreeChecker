@@ -69,7 +69,7 @@ export async function get_next_url(url) {
 }
 export async function canStart(url) {
     const urls = await get_otomation_urls()
-    return url.includes("colab") && urls.includes(url)
+    return url && urls && url.includes("colab") && urls.includes(url)
 }
 export async function canContinue() {
     const urls = await get_otomation_urls()
@@ -98,7 +98,7 @@ export function start(tab) {
 
 export async function add_url(url) {
     url = format_colab_url(url)
-    const urls = await get_otomation_urls()
+    var urls = await get_otomation_urls()
     if (urls && urls.includes(url)) return false
     if (!urls) urls = [url]
 
