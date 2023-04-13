@@ -287,13 +287,18 @@
         });
     }
     sendContentLoaded("JS_LOADED")
+    var sended=false
     document.addEventListener("DOMContentLoaded", function () {
         console.log("completed");
         var int1 = setInterval(function () {
+            if (sended) {
+                return
+            }
             if (document.querySelector("#header-logo > a > iron-icon")) {
                 console.log("LOAD_COMPLETED");
                 sendContentLoaded()
                 clearInterval(int1)
+                sended=true
                 return
             }
 
@@ -303,6 +308,7 @@
             console.log("LOAD_ERROR");
             sendContentLoaded("LOAD_ERROR")
             this.clearInterval(int1)
+            sended=true
         }, 100)
 
     });
