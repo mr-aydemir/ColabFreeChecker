@@ -26,9 +26,13 @@ def click(img, grayscale=True, confidence=0.7, cx=0.5, cy=0.5):
             if area is not None:
                 x, y = area.left+area.width*cx, area.top+area.height*cy
                 pyautogui.click(x, y)
-                return 'Clicked '+str(x) + ", " + str(y)
+                message = 'Clicked '+str(x) + ", " + str(y)
+                print(message)
+                return message
             if datetime.datetime.now().second-now.second > 5:
-                return "click wait end."
+                message = "area is not found, click wait end."
+                print(message)
+                return message
             time.sleep(0.5)
     except Exception as e:
         return str(e)
