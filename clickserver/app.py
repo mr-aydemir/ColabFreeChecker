@@ -12,7 +12,7 @@ def get_path(path):
 
 
 leave_png = cv2.imread(get_path('leave.png'))
-white_robo = cv2.imread(get_path('white_robo.png'))
+white_robo = cv2.imread(get_path('white_robo_tr.png'))
 reload_png = cv2.imread(get_path('reload.png'))
 
 
