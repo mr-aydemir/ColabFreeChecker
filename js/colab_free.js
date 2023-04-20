@@ -102,7 +102,7 @@
             return
         }
         if (captcha()) {
-            captcha_element = document.querySelector("body > colab-recaptcha-dialog:nth-child(29)").shadowRoot.querySelector("mwc-dialog > div")
+            captcha_element = captcha().shadowRoot.querySelector("mwc-dialog > div")
             console.log(captcha_element);
             await helper.click_robo(captcha_element)
             return
@@ -194,7 +194,7 @@
                 return
             }
             if (captcha()) {
-                captcha_element = document.querySelector("body > colab-recaptcha-dialog").shadowRoot.querySelector("mwc-dialog > div")
+                captcha_element = captcha().shadowRoot.querySelector("mwc-dialog > div")
                 console.log(captcha_element);
                 await helper.click_robo(captcha_element)
                 return
