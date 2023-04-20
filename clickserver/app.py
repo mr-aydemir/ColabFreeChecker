@@ -48,7 +48,7 @@ def click_leave():
     return click(leave_png, grayscale=True, confidence=0.7)
 
 
-@app.route('/click_robo')
+@app.route('/click_robo',methods=['POST'])
 def click_robo():
     bbox=request.json
     if bbox is not None:

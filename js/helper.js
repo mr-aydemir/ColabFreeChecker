@@ -9,7 +9,7 @@ export async function click_robo(captcha) {
     width= captcha.offsetWidth
     height= captcha.offsetHeight */
     await fetch("http://127.0.0.1:5000/click_robo", {
-        method: 'GET',
+        method: 'POST',
         headers: {
           'Accept': 'application/json',
           'Content-Type': 'application/json'
