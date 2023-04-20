@@ -4,9 +4,9 @@ export async function click_leave() {
     });
 }
 export async function click_robo(captcha) {
-    top= captcha.offsetTop + window.screenY,
-    left= captcha.offsetLeft + window.screenX,
-    width= captcha.offsetWidth,
+    top= captcha.offsetTop + window.screenY
+    left= captcha.offsetLeft + window.screenX
+    width= captcha.offsetWidth
     height= captcha.offsetHeight
     await fetch(`http://127.0.0.1:5000/click_robo?top=${top}&left=${left}&width=${width}&height=${height}`, {
         method: 'GET',
