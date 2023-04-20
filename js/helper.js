@@ -4,20 +4,16 @@ export async function click_leave() {
     });
 }
 export async function click_robo(captcha) {
-    
-    await fetch("http://127.0.0.1:5000/click_robo", {
-        mode: 'no-cors',
-        method: 'POST',
+    top= captcha.offsetTop + window.screenY,
+    left= captcha.offsetLeft + window.screenX,
+    width= captcha.offsetWidth,
+    height= captcha.offsetHeight
+    await fetch(`http://127.0.0.1:5000/click_robo?top=${top}&left=${left}&width=${width}&height=${height}`, {
+        method: 'GET',
         headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            top: captcha.offsetTop + window.screenY,
-            left: captcha.offsetLeft + window.screenX,
-            width: captcha.offsetWidth,
-            height: captcha.offsetHeight
-        })
+            'Content-Type': 'multipart/form-data',
+            'Accept': 'application/json'
+        }
     });
 }
 export function format_colab_url(url) {
