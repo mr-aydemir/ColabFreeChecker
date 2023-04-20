@@ -8,7 +8,7 @@ export async function click_robo(captcha) {
     left= captcha.offsetLeft + window.screenX
     width= captcha.offsetWidth
     height= captcha.offsetHeight */
-    await fetch(`http://127.0.0.1:5000/click_robo?top=${captcha.offsetTop + window.screenY}&left=${captcha.offsetLeft + window.screenX}&width=${captcha.offsetWidth}&height=${captcha.offsetHeight}`, {
+    await fetch(`http://127.0.0.1:5000/click_robo?top=${captcha.offsetTop + window.screenY}&left=${captcha.offsetLeft + window.screenX}&width=${captcha.offsetWidth}&height=${captcha.offsetHeight}/`, {
         method: 'GET',
         headers: {
             'Content-Type': 'multipart/form-data',
