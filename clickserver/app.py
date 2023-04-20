@@ -7,6 +7,7 @@ from flask import Flask, request
 
 import pyautogui
 
+from flask_cors import CORS
 
 def get_path(path):
     return os.path.join(str(Path(__file__).parent), path)
@@ -40,6 +41,7 @@ def click(img, grayscale=True, confidence=0.7, cx=0.5, cy=0.5):
 
 
 app = Flask(__name__)
+CORS(app)
 
 """ @app.route('/click_test')
 def click_test():
