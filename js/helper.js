@@ -8,13 +8,20 @@ export async function click_robo(captcha) {
     left= captcha.offsetLeft + window.screenX
     width= captcha.offsetWidth
     height= captcha.offsetHeight */
-    await fetch(`http://127.0.0.1:5000/click_robo?top=${captcha.offsetTop + window.screenY}&left=${captcha.offsetLeft + window.screenX}&width=${captcha.offsetWidth}&height=${captcha.offsetHeight}`, {
+    await fetch("http://127.0.0.1:5000/click_robo", {
         mode: 'no-cors',
-        method: 'GET',
+        method: "post",
         headers: {
-            'Content-Type': 'multipart/form-data',
-            'Accept': 'application/json'
-        }
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        //make sure to serialize your JSON body
+        body: JSON.stringify({
+            top: captcha.offsetTop + window.screenY,
+            left: captcha.offsetLeft + window.screenX,
+            width: captcha.offsetWidth,
+            height: captcha.offsetHeight
+        })
     });
 }
 export function format_colab_url(url) {

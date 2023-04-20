@@ -46,11 +46,11 @@ def click_test():
     return click('leave_dart_tr.png', grayscale=True, confidence=0.7) """
 @app.after_request
 def after_request(response):
-    white_origin= ['http://localhost', 'http://127.0.0.1']
+    """ white_origin= ['http://localhost', 'http://127.0.0.1']
     if request.headers['Origin'] in white_origin:
         response.headers['Access-Control-Allow-Origin'] = request.headers['Origin'] 
         response.headers['Access-Control-Allow-Methods'] = 'PUT,GET,POST,DELETE'
-        response.headers['Access-Control-Allow-Headers'] = 'Content-Type,Authorization'
+        response.headers['Access-Control-Allow-Headers'] = 'Content-Type,Authorization' """
     return response
 
 @app.route('/click_leave')
