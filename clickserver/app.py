@@ -53,10 +53,10 @@ def click_leave():
 
 @app.route('/click_robo')
 def click_robo():
-    bbox=request.json
+    bbox=request.form
     if bbox is not None:
-        cx=bbox["left"]+bbox["width"]/2
-        cy=bbox["top"]+bbox["height"]/2
+        cx=float(bbox["left"])+float(bbox["width"])/2
+        cy=float(bbox["top"])+float(bbox["height"])/2
         pyautogui.click(cx, cy)
         message=f"clicked {cx}, {cy}"
         print(message)
