@@ -50,7 +50,7 @@ def click_leave():
 
 @app.route('/click_robo')
 def click_robo():
-    bbox=request.form
+    bbox=request.json
     if bbox is not None:
         cx=float(bbox["left"])+float(bbox["width"])/2
         cy=float(bbox["top"])+float(bbox["height"])/2
