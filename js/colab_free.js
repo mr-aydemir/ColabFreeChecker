@@ -102,7 +102,9 @@
             return
         }
         if (captcha()) {
-            await helper.click_robo()
+            captcha_element = document.querySelector("body > colab-recaptcha-dialog:nth-child(29)").shadowRoot.querySelector("mwc-dialog > div")
+            console.log(captcha_element);
+            await helper.click_robo(captcha_element)
             return
         }
         if (otomation_enabled) {
@@ -192,7 +194,9 @@
                 return
             }
             if (captcha()) {
-                await helper.click_robo()
+                captcha_element = document.querySelector("body > colab-recaptcha-dialog:nth-child(29)").shadowRoot.querySelector("mwc-dialog > div")
+                console.log(captcha_element);
+                await helper.click_robo(captcha_element)
                 return
             }
 
@@ -289,7 +293,7 @@
     sendContentLoaded("JS_LOADED")
     document.addEventListener("DOMContentLoaded", function () {
         console.log("completed");
-        var sended=false
+        var sended = false
         var load_interval = setInterval(function () {
             if (sended) {
                 clearInterval(load_interval)
@@ -299,7 +303,7 @@
                 console.log("LOAD_COMPLETED");
                 sendContentLoaded()
                 clearInterval(load_interval)
-                sended=true
+                sended = true
                 return
             }
 
@@ -309,7 +313,7 @@
             console.log("LOAD_ERROR");
             sendContentLoaded("LOAD_ERROR")
             this.clearInterval(load_interval)
-            sended=true
+            sended = true
         }, 100)
 
     });

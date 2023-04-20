@@ -3,9 +3,8 @@ export async function click_leave() {
         method: 'GET'
     });
 }
-export async function click_robo() {
-    captcha = document.querySelector("body > colab-recaptcha-dialog:nth-child(29)").shadowRoot.querySelector("mwc-dialog > div")
-    console.log(captcha);
+export async function click_robo(captcha) {
+    
     await fetch("http://127.0.0.1:5000/click_robo", {
         method: 'POST',
         headers: {
@@ -13,8 +12,8 @@ export async function click_robo() {
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-            top: captcha.offsetTop,
-            left: captcha.offsetLeft,
+            top: captcha.offsetTop + window.screenY,
+            left: captcha.offsetLeft + window.screenX,
             width: captcha.offsetWidth,
             height: captcha.offsetHeight
         })
