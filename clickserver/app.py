@@ -53,7 +53,7 @@ def click_robo():
     bbox=request.json
     if bbox is not None:
         cx=float(bbox["left"])+float(bbox["width"])/2
-        cy=float(bbox["top"])+float(bbox["height"])/2 + float(bbox["height"])/4
+        cy=float(bbox["top"])+float(bbox["height"])
         pyautogui.click(cx, cy)
         message=f"clicked {cx}, {cy}"
         print(message)
